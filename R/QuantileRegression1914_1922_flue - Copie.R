@@ -1,12 +1,7 @@
 function_quantile_regression_1914_1922 <- function(varExp) {
 
 # data
- if( varExp == "Exposure_sum") {
-    datared <- used.data %>%
-      mutate(year_num = as.integer(as.character(year))) %>%
-      filter(year_num >1913) %>%
-      filter(stillborn =="0") %>%
-      droplevels
+ 
     
     formula<-as.formula( paste("weight ~ year +boy+parity+Gest_group+city+matage+ married+",eval(substitute(varExp))))
     qr1 <- rq(formula , data=datared , tau =c(0.1, 0.5, 0.9))
