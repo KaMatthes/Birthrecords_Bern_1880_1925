@@ -1,0 +1,467 @@
+---
+title: "Report Analysis Birthweight"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    toc_depth: 3
+    number_sections: yes
+  # word_document:
+  #   toc: yes
+  #   toc_depth: '3'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r global_options, include=FALSE,message=FALSE}
+used.data <- databern %>%
+       filter(multiple==0) %>%
+       filter(!(weight < 1500)) %>%
+       filter(!(matage > 50))  %>%
+       filter(!(matage <14)) %>%
+   filter(!(gest <30)) %>%
+  mutate(
+   Weight_quan = as.character(cut(weight, breaks=quantile(weight,probs=c(0,0.1,0.9,1)),include.lowest = TRUE)),
+   Weight_cat_quan  = Weight_quan,
+   Weight_cat_quan  = replace( Weight_cat_quan, Weight_cat_quan =="[1.5e+03,2.53e+03]","<10th percentile (< 2530 g)" ),
+   Weight_cat_quan  = replace( Weight_cat_quan, Weight_cat_quan =="(2.53e+03,3.78e+03]","10th–90th percentile (2530 - 3780 g)" ),
+   Weight_cat_quan  = replace( Weight_cat_quan, Weight_cat_quan =="(3.78e+03,5.58e+03]",">90th percentile (>3780 g)" ),
+   Weight_cat_quan = factor(Weight_cat_quan, levels = c(">90th percentile (>3780 g)", 
+                                                        "10th–90th percentile (2530 - 3780 g)",
+                                                        "<10th percentile (< 2530 g)")),
+   year = as.factor(year),
+   boy = as.factor(boy),
+   stillborn = as.factor(stillborn),
+   city = as.factor(city),
+   insurance = as.factor(insurance),
+   married = as.factor(married),
+   matbody2 = as.factor(matbody2),
+   occupation2 = as.factor(occupation2),
+   matheight2  = as.factor(matheight2 ),
+   malnutrition2 = as.factor(malnutrition2),
+   Gest_group = factor(Gest_group, levels=c("normal","early")),
+   parity = factor(parity, levels=c("1","2","3",">=4")),
+   city = factor(city, levels=c("1","0")),
+   married = factor(married, levels=c("1","0")),
+   boy = factor(boy, levels=c("1","0")),
+   birth_season = factor( birth_season, levels=c("Spring","Summer","Fall","Winter")),
+   parity = factor(parity, levels = c("1","2","3",">=4")),
+   matbody2 = factor(matbody2, levels=c("2","1","3")),
+   matheight2 = factor(matheight2, levels=c("2","1","3")),
+   malnutrition2 = factor(malnutrition2, levels=c("0","1")),
+   occupation2 = factor(occupation2, levels=c("4","1","2","3","5","6","7")),
+   Exposure_sum_dummy = as.factor(Exposure_sum_dummy)
+  )
+```
+
+
+<!-- # Table -->
+<!-- ## Example data flu -->
+<!-- To estimate the influence of flu on birth weight, stillborn or early birth, only birth with gestational age >= 30 weeks are included (423 - 5% deleted) and gestational age >42 weeks are set to 42 weeks. Otherwise unrealistic values for the flu are estimated. Furthermore only year from 1912-1913 (combined) - 1922 are included. For flu estimations even only years 1918 and 1919 are included.  -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- First.Trimester = Calender weeks of first trimester (first 13 weeks of pregnancy)  -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Second.Trimester = Calender weeks of second trimester (weeks 14-26 of pregnancy)  -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Third.Trimester = Calender weeks of third trimester (weeks 27- until birth, ranges from 27-30, until 27-42)  -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Cases.first = sum of flu cases in the first trimester (sum of 13 weeks)  -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Cases.second = sum of flu cases in the second trimester (sum of 13 weeks)  -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Cases.third = sum of flu cases in the third trimester (sum of 4 - 16 weeks, depending how long the third trimester was)  -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Cases.all = sum of all three trimesters -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Flu_intensity_first = Intensity of flu women were exposed to in the first trimester  -->
+<!-- <br/> -->
+<!-- <br /> -->
+<!-- Flu_intensity_second = Intensity of flu women were exposed to in the second trimester  -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Flu_intensity_third = Intensity of flu women were exposed to in the third trimester -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Flu_intensity_all = Intensity of flu women were exposed to in all trimester -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Exposure_sum = in how many trimesters were the women exposed (0,1,2,3) -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- Exposure_sum_dummy = was a woman exposed at all (0=no,1=yes), however this variable makes not much sense. Since a lot women were exposed in 1918 and 1919 in at least one trimester (not many 0) and nobody in the years before or after. Meaning Exposure_sum_dummy==1 are almost all cases in year 1918 and 1919 and Exposure_sum_dummy==0 all other years. So we can also only look at years... -->
+<!-- <br /> -->
+<!-- <br /> -->
+<!-- The formula of the estimation of the intensity is: min(cases))/(max(cases)-min(cases)), which leads to values between 0 and 1. I rounded it to two digits, which means a low number of cases also leads to 0.00. I used also more digits -> no difference in the results. Firstly, the intensity was calculated for all cases and secondly, it was assigned to the trimester.  -->
+
+
+<!-- ```{r Tablefull, echo=FALSE,results = "asis",message=FALSE} -->
+<!-- data.head <- used.data %>% -->
+<!--    filter(year=="1918" | year=="1919") %>% -->
+<!--    select(year,birthday2,First.Trimester =First.Trimester.weeks.range,Second.Trimester =Second.Trimester.weeks.range, -->
+<!--           Third.Trimester =Third.Trimester.weeks.range, Cases.first = Cases.rollsum.first, Cases.second=Cases.rollsum.second, -->
+<!--           Cases.third=Cases.rollsum.third, Cases.all=Cases.rollsum.all,Flu_intensity_first,Flu_intensity_second,  -->
+<!--           Flu_intensity_third, Flu_intensity_all, Exposure_sum,Exposure_dummy=Exposure_sum_dummy) -->
+<!--  data.head[c(4,160,320, 400,560,640,720, 795, 850,980,1000),] %>% -->
+<!--     kbl() %>% -->
+<!--     kable_paper("hover", full_width = F) -->
+
+<!-- ``` -->
+
+
+<!-- ## Date flu -->
+
+<!-- ```{r Tableflu, echo=FALSE,results = "asis",message=FALSE} -->
+<!-- datatab <- used.data %>% -->
+<!--   mutate(year_num = as.integer(as.character(year)), -->
+<!--          Exposure_sum = as.factor(Exposure_sum)) %>% -->
+<!--   filter(year_num >1911) %>% -->
+<!--     mutate(year=as.character(year), -->
+<!--            year=replace(year, year=="1912", "1912-1913"), -->
+<!--          year=replace(year, year=="1913", "1912-1913"))%>% -->
+<!--    select(year,birthweight=weight,stillborn ,birth_season,Gest_group,matage,parity,boy,weight,Cases.first = Cases.rollsum.first, Cases.second=Cases.rollsum.second, -->
+<!--           Cases.third=Cases.rollsum.third, Cases.all=Cases.rollsum.all,Flu_intensity_first,Flu_intensity_second,  -->
+<!--           Flu_intensity_third, Flu_intensity_all, Exposure_sum,Exposure_dummy=Exposure_sum_dummy) -->
+
+<!-- tab1 <- tableby(year ~ ., data=datatab ,test=FALSE) -->
+<!-- summary(tab1) -->
+<!-- ``` -->
+
+
+
+<!-- ## Stillborn -->
+<!-- Percentage of stillborn are larger than the BFS Swiss Data, especially in the years 1919 and 1922. But in the data of bern less married women than expected - > probably lower -->
+<!-- SES -->
+<!-- ```{r Tablestillborn, echo=FALSE,results = "asis",message=FALSE} -->
+
+
+<!-- used.data %>% -->
+<!--   mutate(year_num = as.integer(as.character(year))) %>% -->
+<!--   filter(year_num >1911) %>% -->
+<!--   group_by(year,stillborn) %>% -->
+<!--   summarise(N=n())%>% -->
+<!--   filter(!is.na(stillborn)) %>% -->
+<!--   spread(., stillborn, N) %>% -->
+<!--   mutate(alive_bfs = `0`, -->
+<!--          stillborn_bfs = `1`, -->
+<!--          percentage_stillborn_bfs = round(stillborn_bfs/alive_bfs*100,2)) %>% -->
+<!--    select(year, alive_bfs, stillborn_bfs, percentage_stillborn_bfs) %>% -->
+<!--    left_join(data.bfs.stillborn) %>% -->
+<!--    mutate(Perc_diff = percentage_stillborn_bfs - percentage_stillborn)%>% -->
+<!--        kbl(caption = "Data Bern") %>% -->
+<!--     kable_paper("hover", full_width = F) -->
+<!-- ``` -->
+
+
+# Birth weights
+
+## Time series
+
+No significant changes in birth weight 1918 and 1919. But birth weights increase (breakpoint) in May 1919 (week 27).
+<br />
+<br />
+Weekly
+<br />
+<br />
+```{r ,echo=FALSE, message=FALSE,warning=FALSE,fig.height = 10, fig.width = 10}
+function_plot_kw(Timespan="weekly")
+```
+
+Monthly
+<br />
+<br />
+```{r ,echo=FALSE, message=FALSE,warning=FALSE,fig.height = 10, fig.width = 10}
+function_plot_kw(Timespan="monthly")
+```
+
+
+## unadjusted
+
+The quantile regression does not provide any further information. The results are similar when using the quantile and linear regressions. No significant differences between the quantiles are found for the years 1918 and 1919. 
+<br />
+<br />
+Lineare regression 
+<br />
+<br />
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1914_1922(varExp="unadjusted_year_linear")
+```
+
+Quantile regression  
+<br />
+<br />
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
+function_quantile_regression_1914_1922(varExp="unadjusted_year_qr")
+```
+
+Lineare regression only Exposure
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_quantile_regression_1914_1922(varExp="linear_Exp")
+```
+
+Lineare regression only flu intensity
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_quantile_regression_1914_1922(varExp="linear_Int")
+```
+
+GAM regression 
+<br />
+<br />
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
+function_quantile_regression_1914_1922(varExp="unadjusted_gam_model")
+```
+
+GAM regression and Exposure 
+<br />
+<br />
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height =5, fig.width =5}
+function_quantile_regression_1914_1922(varExp="adjusted_gam_model_Exp")
+```
+
+
+GAM regression and Exposure 
+<br />
+<br />
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height =5, fig.width =8}
+function_quantile_regression_1914_1922(varExp="adjusted_gam_model_Int")
+```
+
+## adjusted 
+Lineare regression  
+<br />
+<br />
+
+Exposure sum
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_quantile_regression_1914_1922(varExp="adjusted_year_linear_Exp")
+```
+
+Flu Intensity
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_quantile_regression_1914_1922(varExp="adjusted_year_linear_Int")
+```
+
+GAM regression  without gestational age
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_quantile_regression_1914_1922(varExp="adjusted_gam_model")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
+function_quantile_regression_1914_1922(varExp="adjusted_gam_model_plot")
+```
+
+GAM regression  with gestational age
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_quantile_regression_1914_1922(varExp="adjusted_gam_model_gest")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
+function_quantile_regression_1914_1922(varExp="adjusted_gam_model_plot_gest")
+```
+
+
+# Gestational age
+## Table
+
+```{r Tableflu, echo=FALSE,results = "asis",message=FALSE}
+used.data %>%
+  mutate(year_num = as.integer(as.character(year)),
+         year=as.character(year)) %>%
+  filter(year_num >1913) %>%
+   filter(stillborn==0) %>%
+   group_by(year, Gest_group) %>%
+   count() %>%
+   ungroup() %>%
+   spread(., Gest_group, n) %>%
+    mutate(total = normal + early,
+           perc_early = round((early/total)*100,2))%>%
+   kbl() %>%
+  kable_material(c("striped", "hover"),full_width = F,position = "left")
+```
+
+
+
+## Logistic Regression
+I did the analysis with and without stillborns -> similar results. The results are shown with data without Stillborn.
+High multicollinearity between year and exposure sum and year and flu intensity. Therefor only one variable is used.
+
+unadjusted
+<br />
+<br />
+
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_gestage(varExp="unadjusted")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5}
+function_regression_gestage(varExp="unadjusted_plot")
+```
+
+only exposure
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_gestage(varExp="unadjusted_Exp" )
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5}
+function_regression_gestage(varExp="unadjusted_Exp_plot" )
+```
+
+only flu intensity
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_gestage(varExp="unadjusted_Int")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5}
+function_regression_gestage(varExp="unadjusted_Int_plot")
+```
+
+adjusted
+<br />
+<br />
+year
+```{r, echo=FALSE,message=TRUE,warning=FALSE}
+function_regression_gestage(varExp="adjusted_year")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5}
+function_regression_gestage(varExp="adjusted_year_plot")
+```
+
+Exposure sum
+```{r, echo=FALSE,message=TRUE,warning=FALSE}
+function_regression_gestage(varExp="adjusted_Exp")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5}
+function_regression_gestage(varExp="adjusted_Exp_plot")
+```
+
+Flu_intensity_all
+```{r, echo=FALSE,message=TRUE,warning=FALSE}
+function_regression_gestage(varExp="adjusted_Int")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5}
+function_regression_gestage(varExp="adjusted_Int_plot")
+```
+
+
+# Stillborn
+```{r, echo=FALSE,results = "asis",message=FALSE}
+used.data %>%
+  mutate(year_num = as.integer(as.character(year))) %>%
+  filter(year_num >1911) %>%
+  group_by(year,stillborn) %>%
+  summarise(N=n())%>%
+  filter(!is.na(stillborn)) %>%
+  spread(., stillborn, N) %>%
+  mutate(alive_d = `0`,
+         stillborn_d = `1`,
+         percentage_stillborn_d = round((stillborn_d/(alive_d+stillborn_d))*100 , 2)) %>%
+   select(year, alive_d,stillborn_d,percentage_stillborn_d) %>%
+   left_join(data.bfs.stillborn) %>%
+   rename(alive_bfs = alive,
+          stillborn_bfs = stillborn,
+          perc_stillborn_bfs2 = percentage_stillborn,
+          alive = alive_d,
+          stillborn = stillborn_d,
+          perc_stillborn = percentage_stillborn_d) %>%
+   mutate(perc_stillborn_bfs = round((stillborn_bfs/(alive_bfs+stillborn_bfs))*100 , 2)) %>%
+   select(- perc_stillborn_bfs2) %>%
+      mutate(Perc_diff = perc_stillborn_bfs - perc_stillborn) %>%
+       kbl(caption = "Data Bern") %>%
+    kable_paper("hover", full_width = F)
+```
+
+
+## Logistic Regression
+
+High multicollinearity between year and exposure sum and year and flu intensity. Therefor only one variable is used.
+
+unadjusted
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_stillborn(varExp="unadjusted")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5}
+function_regression_stillborn(varExp="unadjusted_plot")
+```
+
+Only Exposure
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_stillborn(varExp="unadjusted_Exp")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5}
+function_regression_stillborn(varExp="unadjusted_Exp_plot")
+```
+
+Only Flu Intensity
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_stillborn(varExp="unadjusted_Int")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5}
+function_regression_stillborn(varExp="unadjusted_Int_plot")
+```
+
+adjusted year
+<br />
+<br />
+```{r, echo=FALSE,message=TRUE,warning=FALSE}
+function_regression_stillborn(varExp="adjusted_year")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5}
+function_regression_stillborn(varExp="adjusted_year_plot")
+```
+
+adjusted Exp
+<br />
+<br />
+```{r, echo=FALSE,message=TRUE,warning=FALSE}
+function_regression_stillborn(varExp="adjusted_Exp")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5}
+function_regression_stillborn(varExp="adjusted_Exp_plot")
+```
+
+
+adjusted Int
+<br />
+<br />
+```{r, echo=FALSE,message=TRUE,warning=FALSE}
+function_regression_stillborn(varExp="adjusted_Int")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5}
+function_regression_stillborn(varExp="adjusted_Int_plot")
+```

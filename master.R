@@ -24,14 +24,14 @@
   library(mgcv)
   library(tsoutliers)
   library(strucchange)
-  
+  library(readxl)
+
   # original data
-  data.bern <- "BernAll_V4.csv"
+  data.bern <- "BernAll_V5.csv"
   data.grippe <- "GrippeBern.csv"
   
   
-  data.bfs.stillborn <- read.csv(paste0("input/Totgeburten_Schweiz.csv"), header=TRUE, sep=";")%>%
-    rename(year = `ï..year`) %>%
+  data.bfs.stillborn <- readxl::read_excel(paste0("data_raw/Totgeburten_Schweiz.xlsx")) %>%
     mutate(year =as.factor(year))
   
   # Parameter zum Plotten
@@ -55,37 +55,16 @@
   
   # load data
   # load(paste0("input/databern.RData"))
-  
-  source(paste0("Rcode/data.R"))
-  source(paste0("Rcode/data_missing.R"))
-  # source(paste0("Rcode/data_missing_red.R"))
-  source(paste0("Rcode/data_plot.R"))
-  source(paste0("Rcode/QuantileRegression1914_1922.R")) # n
+  # source(paste0("R/GrippeExposure.R"))
+  # source(paste0("R/data.R"))
+  source(paste0("R/data_plot.R"))
+  source(paste0("R/QuantileRegression1914_1922.R"))
+  source(paste0("R/LogRegression_Stillborn.R"))
+  source(paste0("R/LogRegression_Gestage.R"))
 
-  source(paste0("Rcode/QuantileRegression1880_1900.R"))
-  source(paste0("Rcode/QuantileRegression_years.R"))
-  source(paste0("Rcode/QuantileRegression_years_flu.R"))
-  source(paste0("Rcode/QuantileRegression_ExposureWeeks_flu.R"))
-  source(paste0("Rcode/LogRegression_Stillborn.R"))
-  source(paste0("Rcode/LogRegression_Stillborn_year.R"))
-  source(paste0("Rcode/LogRegression_Stillborn_ExposureWeeks.R"))
-  source(paste0("Rcode/LogRegression_Gestage.R"))
-  source(paste0("Rcode/LogRegression_Gastage_year.R"))
-  source(paste0("Rcode/LogRegression_Gastage_ExposureWeeks.R"))
   
   
-  source(paste0("Rcode/plot_kw.R")) # n
-  source(paste0("Rcode/PoissonRegression_Gestage.R"))
-  source(paste0("Rcode/PoissonRegression_Stillborn.R"))
+  source(paste0("R/plot_kw.R")) # n
+
   
-  # anzahl_missing <- sapply(databern, function(x) sum(is.na(x)))
-  # anzahl_missing_per <- round(anzahl_missing/nrow(databern)*100,2)
-  
-  
-  # Erstelle Htlm
-  # render(paste0("Rcode/Report.Rmd"), output_file = paste0("/Users/katarina/Dropbox/Masterarbeit Vivienne/Analysis/output/",today(),"_Report.html"))
-  
-  # 
-  # render(paste0("Rcode/Report.Rmd"), output_file = paste0("C:/Users/kmatth/Dropbox/Masterarbeit Vivienne/Analysis/output/",today(),"_Report.html"))
-  
-  render(paste0("Rcode/20220315_Report_flu.Rmd"), output_file = paste0("C:/Users/kmatth/Dropbox/Masterarbeit Vivienne/Analysis/output/",today(),"_Report_flu.html"))
+  render(paste0("R/Report_1914_1922.Rmd"), output_file = paste0("../output/",today(),"_Report_1914_1922.html"))
