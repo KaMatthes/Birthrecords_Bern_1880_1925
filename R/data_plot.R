@@ -1,11 +1,68 @@
 function_plot <- function() {
   
+data_plot <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
+  filter(multiple==0) %>%
+    filter(!(gest <30)) %>%
+  filter(!(weight < 1500)) %>%
+  filter(!(matage > 50))  %>%
+  filter(!(matage <14)) %>%
+    filter(!year=="1901") %>%
+    filter(!year=="1902") %>%
+    filter(!year=="1903") %>%
+    filter(!year=="1911") %>%
+    filter(!year=="1912") %>%
+    filter(!year=="1913") %>%
+    filter(!year=="1923") %>%
+    select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, gestdummy2, matheight2, matbody2,
+           malnutrition2, occupation2, agemenarche, coordinates, distance, city)%>%
+    mutate(coordinates=ifelse(coordinates=="", NA, coordinates),
+           birth_isoweek = isoweek(dmy(birthday2)),
+           birth_month = month(dmy(birthday2)),
+           birth_weekday = wday(dmy(birthday2),week_start = 1),
+           birth_weekday2 = weekdays(dmy(birthday2)),
+           birth_season = as.character(cut(birth_month, breaks=c(1,3,6,9,12),include.lowest = TRUE)),
+           birth_season  = replace(birth_season, birth_season=="[1,3]", "Winter" ),
+           birth_season  = replace(birth_season, birth_season=="(3,6]", "Spring" ),
+           birth_season  = replace(birth_season, birth_season=="(6,9]", "Summer" ),
+           birth_season  = replace(birth_season, birth_season=="(9,12]", "Fall" ),
+           birth_season = as.factor(birth_season),
+           birth_season = factor(birth_season, levels = c("Spring","Summer","Fall","Winter")),
+           Gest_group = floor(gest),
+           # Gest_group  = replace(Gest_group ,Gest_group>42, "late" ),
+           Gest_group  = replace(Gest_group ,Gest_group>=38, "normal" ),
+           Gest_group  = replace(Gest_group ,Gest_group<38, "early" ),
+           Gest_group = as.factor(Gest_group),
+           parity = ifelse(parity>3, 4, parity),
+           parity = as.factor(parity),
+           parity = ifelse(parity=="4",">=4", parity),
+           parity = factor(parity, levels = c("1","2","3",">=4")),
+           boy = as.factor(boy),
+         stillborn = as.factor(stillborn),
+         city = as.factor(city),
+         insurance = as.factor(insurance),
+         married = as.factor(married),
+         matbody2 = as.factor(matbody2),
+         occupation2 = as.factor(occupation2),
+         matheight2  = as.factor(matheight2 ),
+         malnutrition2 = as.factor(malnutrition2),
+         Gest_group = factor(Gest_group, levels=c("normal","early")),
+         parity = factor(parity, levels=c("1","2","3",">=4")),
+         city = factor(city, levels=c("1","0")),
+         married = factor(married, levels=c("1","0")),
+         boy = factor(boy, levels=c("1","0")),
+         birth_season = factor( birth_season, levels=c("Spring","Summer","Fall","Winter")),
+         parity = factor(parity, levels = c("1","2","3",">=4")),
+         matbody2 = factor(matbody2, levels=c("2","1","3")),
+         matheight2 = factor(matheight2, levels=c("2","1","3")),
+         malnutrition2 = factor(malnutrition2, levels=c("0","1")),
+         occupation2 = factor(occupation2, levels=c("4","1","2","3","5","6","7")))
+         
   
-boxplot_weight <- ggplot(data=used.data)+
-    geom_violin(aes(x=year,y=weight,group=year, fill=year))+
-    geom_boxplot(aes(x=year,y=weight,group=year, fill=year),width=0.2)+
+boxplot_weight <- ggplot(data=data_plot)+
+    geom_violin(aes(x=year,y=weight,group=factor(year), fill=factor(year)))+
+    geom_boxplot(aes(x=year,y=weight,group=factor(year), fill=factor(year)),width=0.2)+
     ylab("Birthweight in gram")+
-    ggtitle("Birthweihts")+
+    ggtitle("Birthweights")+
     scale_fill_manual("",values = c(cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],
                                     cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1]))+
     xlab("")+
@@ -21,36 +78,36 @@ boxplot_weight <- ggplot(data=used.data)+
           legend.position = "none",
           axis.title.x = element_text(vjust=10))
 
-  weighttab <- table(used.data$Weight_cat_quan,used.data$year)
-  weighttabpro <- prop.table(weighttab,2)
-  weighttabpro <-melt(weighttabpro) 
-  colnames(weighttabpro) <- c("weight","year","prop")
-  weighttabpro <- na.omit(weighttabpro)
-  weighttabpro <-  weighttabpro %>%
-    mutate(weight = as.factor(weight),
-           year = as.factor(year))
+  # weighttab <- table(data_plot$Weight_cat_quan,data_plot$year)
+  # weighttabpro <- prop.table(weighttab,2)
+  # weighttabpro <-melt(weighttabpro) 
+  # colnames(weighttabpro) <- c("weight","year","prop")
+  # weighttabpro <- na.omit(weighttabpro)
+  # weighttabpro <-  weighttabpro %>%
+  #   mutate(weight = as.factor(weight),
+  #          year = as.factor(year))
+  # 
+  # weightplot <- ggplot(data=weighttabpro)+
+  #   geom_bar( aes(x =  year , y = prop,fill =  weight),stat="identity")+
+  #   scale_y_continuous(labels = scales::percent)+
+  #   scale_fill_manual("weight",values = cbp1)+
+  #   ylab("Weight cat")+
+  #   xlab("")+
+  #   guides(fill=guide_legend(title="Weight: "))+
+  #   theme_bw()+
+  #   theme(aspect.ratio=1,
+  #         strip.text.x=element_text(size=strip_text),
+  #         axis.text=element_text(color="black",size=size_axis),
+  #         axis.title=element_text(size=size_axis_title),
+  #         legend.text=element_text(size=size_legend),
+  #         legend.title =element_text(size=size_legend),
+  #         plot.title = element_text(size=plot_title,hjust = 0.5),
+  #         axis.text.x = element_text(angle = 45, hjust = 1),
+  #         legend.position = "top",
+  #         axis.title.x = element_text(vjust=10))
+  # 
   
-  weightplot <- ggplot(data=weighttabpro)+
-    geom_bar( aes(x =  year , y = prop,fill =  weight),stat="identity")+
-    scale_y_continuous(labels = scales::percent)+
-    scale_fill_manual("weight",values = cbp1)+
-    ylab("Weight cat")+
-    xlab("")+
-    guides(fill=guide_legend(title="Weight: "))+
-    theme_bw()+
-    theme(aspect.ratio=1,
-          strip.text.x=element_text(size=strip_text),
-          axis.text=element_text(color="black",size=size_axis),
-          axis.title=element_text(size=size_axis_title),
-          legend.text=element_text(size=size_legend),
-          legend.title =element_text(size=size_legend),
-          plot.title = element_text(size=plot_title,hjust = 0.5),
-          axis.text.x = element_text(angle = 45, hjust = 1),
-          legend.position = "top",
-          axis.title.x = element_text(vjust=10))
-  
-  
-  # weightscaletab <- table(used.data$Weight_cat_quan_scale,used.data$year)
+  # weightscaletab <- table(data_plot$Weight_cat_quan_scale,data_plot$year)
   # weightscaletabpro <- prop.table(weightscaletab,2)
   # weightscaletabpro <-melt(weightscaletabpro) 
   # colnames(weightscaletabpro) <- c("weightscale","year","prop")
@@ -78,14 +135,13 @@ boxplot_weight <- ggplot(data=used.data)+
   #         legend.position = "top",
   #         axis.title.x = element_text(vjust=10))
   
-  boytab <- table(used.data$boy,used.data$year)
+  boytab <- table(data_plot$boy,data_plot$year)
   boytabpro <- prop.table(boytab,2)
   boytabpro <-melt(boytabpro) 
   colnames(boytabpro) <- c("boy","year","prop")
   boytabpro <- na.omit(boytabpro)
   boytabpro <-  boytabpro %>%
-  mutate(boy = as.factor(boy),
-  year = as.factor(year))
+  mutate(boy = as.factor(boy))
       
   Boyplot <- ggplot(data=boytabpro)+
         geom_bar( aes(x =  year , y = prop,fill =  boy),stat="identity")+
@@ -106,14 +162,13 @@ boxplot_weight <- ggplot(data=used.data)+
               legend.position = "top",
               axis.title.x = element_text(vjust=10))
       
-  ParaKattab <- table(used.data$parity,used.data$year)
+  ParaKattab <- table(data_plot$parity,data_plot$year)
   ParaKatpro <- prop.table(ParaKattab,2)
   ParaKatpro <-melt(ParaKatpro)
   colnames(ParaKatpro) <- c("ParaKat","year","prop")
   ParaKatpro <- na.omit(ParaKatpro)
   ParaKatpro <-   ParaKatpro %>%
-    mutate(boy = as.factor(ParaKat),
-           year = as.factor(year))
+    mutate(boy = as.factor(ParaKat))
       
       ParaKatplot <- ggplot(data=ParaKatpro)+
         geom_bar(aes(x =  year , y = prop,fill = factor(ParaKat, levels=c(">=4","3","2","1")))
@@ -135,9 +190,9 @@ boxplot_weight <- ggplot(data=used.data)+
               legend.position = "top",
               axis.title.x = element_text(vjust=10))
       
-      boxplot_Alter <- ggplot(data=used.data)+
-        geom_violin(aes(x=year,y=matage,group=year, fill=year))+
-        geom_boxplot(aes(x=year,y=matage,group=year, fill=year),width=0.2)+
+      boxplot_Alter <- ggplot(data=data_plot)+
+        geom_violin(aes(x=year,y=matage,group=factor(year), fill=factor(year)))+
+        geom_boxplot(aes(x=year,y=matage,group=factor(year), fill=factor(year)),width=0.2)+
         ylab("Age of mother in years")+
         xlab("")+
         scale_fill_manual("",values = c(cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],
@@ -156,9 +211,9 @@ boxplot_weight <- ggplot(data=used.data)+
               axis.title.x = element_text(vjust=10))
       
       
-      boxplot_GestationalAge <- ggplot(data=used.data)+
-        geom_violin(aes(x=year,y=gest,group=year, fill=year))+
-        geom_boxplot(aes(x=year,y=gest,group=year, fill=year),width=0.2)+
+      boxplot_GestationalAge <- ggplot(data=data_plot)+
+        geom_violin(aes(x=year,y=gest,group=factor(year), fill=factor(year)))+
+        geom_boxplot(aes(x=year,y=gest,group=factor(year), fill=factor(year)),width=0.2)+
         ylab("Gestational age in weeks")+
         ggtitle("Gestational age")+
         scale_fill_manual("",values = c(cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],
@@ -177,7 +232,7 @@ boxplot_weight <- ggplot(data=used.data)+
               axis.title.x = element_text(vjust=10))
       
       
-      Gestkattab <- table(used.data$Gest_group,used.data$year)
+      Gestkattab <- table(data_plot$Gest_group,data_plot$year)
       Gestkattabpro <- prop.table(Gestkattab,2)
       Gestkattabpro <-melt(Gestkattabpro) 
       colnames(Gestkattabpro) <- c("Gest_group","year","prop")
@@ -206,49 +261,84 @@ boxplot_weight <- ggplot(data=used.data)+
               axis.title.x = element_text(vjust=10))
       
       
-      boxplot_Birthweek <- ggplot(data=used.data)+
-        geom_violin(aes(x=year,y=birth_isoweek,group=year, fill=year))+
-        geom_boxplot(aes(x=year,y=birth_isoweek,group=year, fill=year),width=0.2)+
-        ylab("Birthweek")+
-        ggtitle("Birthweek")+
-        scale_fill_manual("",values = c(cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],
-                                        cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1]))+
+       
+      Birthweekdaytab <- table(data_plot$birth_weekday,data_plot$year)
+      Birthweekdaytabpro <- prop.table(Birthweekdaytab,2)
+      Birthweekdaytabpro <-melt(Birthweekdaytabpro) 
+      colnames(Birthweekdaytabpro) <- c("birth_weekday","year","prop")
+      Birthweekdaytabpro <- na.omit(Birthweekdaytabpro)
+      Birthweekdaytabpro <- Birthweekdaytabpro %>%
+        mutate(birth_weekday= as.factor(birth_weekday))
+      
+      
+      boxplot_Birthweekday <- ggplot(data=Birthweekdaytabpro)+
+        geom_bar( aes(x =  year , y = prop,fill =  birth_weekday),stat="identity")+
+        scale_y_continuous(labels = scales::percent)+
+        scale_fill_manual("Weekday",
+                          breaks=c("1","2","3","4","5","6","7"),
+                          labels=c("Monday","Tuesday","Wednesday", "Thursday","Friday","Saturday","Sunday"),
+                          values = cbp1)+
+        ylab("Weekday")+
         xlab("")+
+        guides(fill=guide_legend(title="Weekday: "))+
         theme_bw()+
         theme(aspect.ratio=1,
               strip.text.x=element_text(size=strip_text),
               axis.text=element_text(color="black",size=size_axis),
               axis.title=element_text(size=size_axis_title),
               legend.text=element_text(size=size_legend),
-              legend.title = element_blank(),
-              plot.title = element_text(size=size_legend,hjust = 0.5),
+              legend.title =element_text(size=size_legend),
+              plot.title = element_text(size=plot_title,hjust = 0.5),
               axis.text.x = element_text(angle = 45, hjust = 1),
-              legend.position = "none",
+              legend.position = "top",
               axis.title.x = element_text(vjust=10))
       
       
-      boxplot_Birthmonth <- ggplot(data=used.data)+
-        geom_violin(aes(x=year,y=birth_month,group=year, fill=year))+
-        geom_boxplot(aes(x=year,y=birth_month,group=year, fill=year),width=0.2)+
-        ylab("Birthmonth")+
-        ylim(1,12)+
-        ggtitle("Birthmonth")+
-        scale_fill_manual("",values = c(cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],
-                                        cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1]))+
+      boxplot_Birthweekday_total <- ggplot(data=Birthweekdaytabpro)+
+        geom_bar( aes(x =  birth_weekday , y = prop),stat="identity")+
+        scale_y_continuous(labels = scales::percent)+
+        scale_fill_manual("Weekday",
+                          breaks=c("1","2","3","4","5","6","7"),
+                          labels=c("Monday","Tuesday","Wednesday", "Thursday","Friday","Saturday","Sunday"),
+                          values = cbp1)+
+        ylab("Weekday")+
         xlab("")+
+        guides(fill=guide_legend(title="Weekday: "))+
         theme_bw()+
         theme(aspect.ratio=1,
               strip.text.x=element_text(size=strip_text),
               axis.text=element_text(color="black",size=size_axis),
               axis.title=element_text(size=size_axis_title),
               legend.text=element_text(size=size_legend),
-              legend.title = element_blank(),
-              plot.title = element_text(size=size_legend,hjust = 0.5),
+              legend.title =element_text(size=size_legend),
+              plot.title = element_text(size=plot_title,hjust = 0.5),
               axis.text.x = element_text(angle = 45, hjust = 1),
-              legend.position = "none",
+              legend.position = "top",
               axis.title.x = element_text(vjust=10))
       
-     Birthmonth_cattab <- table(as.factor(used.data$birth_month),used.data$year)
+      
+      # boxplot_Birthmonth <- ggplot(data=data_plot)+
+      #   geom_violin(aes(x=year,y=birth_month,group=year, fill=year))+
+      #   geom_boxplot(aes(x=year,y=birth_month,group=year, fill=year),width=0.2)+
+      #   ylab("Birthmonth")+
+      #   ylim(1,12)+
+      #   ggtitle("Birthmonth")+
+      #   scale_fill_manual("",values = c(cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],
+      #                                   cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1]))+
+      #   xlab("")+
+      #   theme_bw()+
+      #   theme(aspect.ratio=1,
+      #         strip.text.x=element_text(size=strip_text),
+      #         axis.text=element_text(color="black",size=size_axis),
+      #         axis.title=element_text(size=size_axis_title),
+      #         legend.text=element_text(size=size_legend),
+      #         legend.title = element_blank(),
+      #         plot.title = element_text(size=size_legend,hjust = 0.5),
+      #         axis.text.x = element_text(angle = 45, hjust = 1),
+      #         legend.position = "none",
+      #         axis.title.x = element_text(vjust=10))
+      
+     Birthmonth_cattab <- table(as.factor(data_plot$birth_month),data_plot$year)
      Birthmonth_catpro <- prop.table(Birthmonth_cattab,2)
      Birthmonth_catpro <-melt(Birthmonth_catpro)
       colnames( Birthmonth_catpro) <- c("Birthmonth_cat","year","prop")
@@ -277,8 +367,30 @@ boxplot_weight <- ggplot(data=used.data)+
              legend.position = "top",
              axis.title.x = element_text(vjust=10))
      
+     Birthmonth_catplot_total <- ggplot(data= Birthmonth_catpro)+
+       geom_bar(aes(x =  factor(Birthmonth_cat) , y = prop),stat="identity")+
+       scale_y_continuous(labels=percent)+
+       scale_fill_manual("Birthmonth_cat",values = mypalette2)+
+       ylab("Birthmonth")+
+       xlab("")+
+       guides(fill=guide_legend(title="Birthmonth: "))+
+       theme_bw()+
+       theme(aspect.ratio=1,
+             strip.text.x=element_text(size=strip_text),
+             axis.text=element_text(color="black",size=size_axis),
+             axis.title=element_text(size=size_axis_title),
+             legend.text=element_text(size=size_legend),
+             legend.title =element_text(size=size_legend),
+             plot.title = element_text(size=plot_title,hjust = 0.5),
+             axis.text.x = element_text(angle = 45, hjust = 1),
+             legend.position = "top",
+             axis.title.x = element_text(vjust=10))
      
-     Birthseason_cattab <- table(as.factor(used.data$birth_season),used.data$year)
+     
+     
+    
+     
+     Birthseason_cattab <- table(as.factor(data_plot$birth_season),data_plot$year)
      Birthseason_catpro <- prop.table(Birthseason_cattab,2)
      Birthseason_catpro <-melt(Birthseason_catpro)
      colnames( Birthseason_catpro) <- c("Birthseason_cat","year","prop")
@@ -307,16 +419,14 @@ boxplot_weight <- ggplot(data=used.data)+
              legend.position = "top",
              axis.title.x = element_text(vjust=10))
      
-     
-      
-     Stillborntab <- table(used.data$stillborn,used.data$year)
+    
+     Stillborntab <- table(data_plot$stillborn,data_plot$year)
      Stillborntabpro <- prop.table(Stillborntab,2)
      Stillborntabpro <-melt(Stillborntabpro) 
       colnames(Stillborntabpro) <- c("Stillborn","year","prop")
      Stillborntabpro <- na.omit(Stillborntabpro)
      Stillborntabpro <- Stillborntabpro %>%
-        mutate(Stillborn = as.factor(Stillborn),
-               year = as.factor(year))
+        mutate(Stillborn = as.factor(Stillborn))
       
      Stillbornplot <- ggplot(data=Stillborntabpro)+
         geom_bar( aes(x =  year , y = prop,fill =  Stillborn),stat="identity")+
@@ -338,14 +448,13 @@ boxplot_weight <- ggplot(data=used.data)+
               axis.title.x = element_text(vjust=10))
       
       
-      citytab <- table(used.data$city,used.data$year)
+      citytab <- table(data_plot$city,data_plot$year)
       citypro <- prop.table(citytab,2)
       citypro <-melt(citypro)
       colnames(citypro) <- c("city","year","prop")
       citypro <- na.omit(citypro)
       citypro <-  citypro %>%
-        mutate(city = as.factor(city),
-               year = as.factor(year))
+        mutate(city = as.factor(city))
       
       cityplot <- ggplot(data=citypro)+
         geom_bar(aes(x =  year , y = prop,fill = city)
@@ -367,7 +476,7 @@ boxplot_weight <- ggplot(data=used.data)+
               legend.position = "top",
               axis.title.x = element_text(vjust=10))
       
-      insurancetab <- table(used.data$insurance,used.data$year)
+      insurancetab <- table(data_plot$insurance,data_plot$year)
       insurancepro <- prop.table(insurancetab,2)
       insurancepro <-melt(insurancepro)
       colnames(insurancepro) <- c("insurance","year","prop")
@@ -396,7 +505,7 @@ boxplot_weight <- ggplot(data=used.data)+
               legend.position = "top",
               axis.title.x = element_text(vjust=10))
       
-      marriedtab <- table(used.data$married,used.data$year)
+      marriedtab <- table(data_plot$married,data_plot$year)
       marriedpro <- prop.table(marriedtab,2)
       marriedpro <-melt(marriedpro)
       colnames(marriedpro) <- c("married","year","prop")
@@ -426,7 +535,7 @@ boxplot_weight <- ggplot(data=used.data)+
               axis.title.x = element_text(vjust=10))
       
       
-      matbodytab <- table(used.data$matbody2,used.data$year)
+      matbodytab <- table(data_plot$matbody2,data_plot$year)
       matbodytabpro <- prop.table(matbodytab,2)
       matbodytabpro <-melt(matbodytabpro) 
       colnames(matbodytabpro) <- c("matbody","year","prop")
@@ -458,7 +567,7 @@ boxplot_weight <- ggplot(data=used.data)+
               axis.title.x = element_text(vjust=10))
       
       
-      matheighttab <- table(used.data$matheight2,used.data$year)
+      matheighttab <- table(data_plot$matheight2,data_plot$year)
       matheighttabpro <- prop.table(matheighttab,2)
       matheighttabpro <-melt(matheighttabpro) 
       colnames(matheighttabpro) <- c("matheight","year","prop")
@@ -491,7 +600,7 @@ boxplot_weight <- ggplot(data=used.data)+
       
       
       
-      malnutritiontab <- table(used.data$malnutrition2,used.data$year)
+      malnutritiontab <- table(data_plot$malnutrition2,data_plot$year)
       malnutritiontabpro <- prop.table(malnutritiontab,2)
       malnutritiontabpro <-melt(malnutritiontabpro) 
       colnames(malnutritiontabpro) <- c("malnutrition","year","prop")
@@ -521,7 +630,7 @@ boxplot_weight <- ggplot(data=used.data)+
               axis.title.x = element_text(vjust=10))
       
       
-      occupationtab <- table(used.data$occupation2,used.data$year)
+      occupationtab <- table(data_plot$occupation2,data_plot$year)
       occupationtabpro <- prop.table(occupationtab,2)
       occupationtabpro <-melt(occupationtabpro) 
       colnames(occupationtabpro) <- c("occupation","year","prop")
@@ -553,11 +662,10 @@ boxplot_weight <- ggplot(data=used.data)+
               axis.title.x = element_text(vjust=10))
       
       
-      boxplot_agemenarche <- ggplot(data=used.data)+
-        geom_violin(aes(x=year,y=agemenarche,group=year, fill=year))+
-        geom_boxplot(aes(x=year,y=agemenarche,group=year, fill=year),width=0.2)+
+      boxplot_agemenarche <- ggplot(data=data_plot)+
+        geom_violin(aes(x=year,y=agemenarche,group=factor(year), fill=factor(year)))+
+        geom_boxplot(aes(x=year,y=agemenarche,group=factor(year), fill=factor(year)),width=0.2)+
         ylab("Agemenarche")+
-        xlim(c("1880","1885","1890","1895", "1900"))+
         ggtitle("Age menarche")+
         scale_fill_manual("",values = c(cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1]))+
         xlab("")+
@@ -576,7 +684,7 @@ boxplot_weight <- ggplot(data=used.data)+
       
       
       
-      # gestdummytab <- table(used.data$gestdummy,used.data$year)
+      # gestdummytab <- table(data_plot$gestdummy,data_plot$year)
       # gestdummypro <- prop.table(gestdummytab,2)
       # gestdummypro <-melt(gestdummypro)
       # colnames(gestdummypro) <- c("gestdummy","year","prop")
@@ -606,13 +714,13 @@ boxplot_weight <- ggplot(data=used.data)+
       #         axis.title.x = element_text(vjust=10))
       
       
-      AllCoef <- cowplot::plot_grid(boxplot_weight, weightplot,Boyplot,
-                                    ParaKatplot,boxplot_Alter , boxplot_GestationalAge, 
-                                    Gestkatplot,  boxplot_Birthweek,boxplot_Birthmonth,
-                                    Birthmonth_catplot, Stillbornplot,cityplot, 
+      AllCoef <- cowplot::plot_grid(boxplot_weight,Boyplot, ParaKatplot,
+                                    boxplot_Alter, boxplot_GestationalAge, Gestkatplot,
+                                    Birthmonth_catplot,Birthmonth_catplot_total,Birthmonth_catplot,
+                                    Birthmonth_catplot_total,Stillbornplot,cityplot,  
                                     insuranceplot,marriedplot,matbodyplot,
-                                    matheightplot,malnutritionplot, occupationplot,
-                                     boxplot_agemenarche ,
+                                    matheightplot,malnutritionplot, occupationplot,  
+                                    boxplot_agemenarche,
                                     ncol=3,nrow=7)
       
       return(AllCoef)

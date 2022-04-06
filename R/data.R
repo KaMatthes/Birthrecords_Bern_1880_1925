@@ -8,11 +8,11 @@ datagrippe_com <- datagrippe %>%
   select(Cases.rollsum, Cases.range, weeks.range)
 
 # 
-databern <- read.csv(paste0("input/",data.bern), header=TRUE, sep=";") %>%
+databern <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
   filter(!(gest <30)) %>%
   filter(!year=="1901") %>%
   filter(!year=="1923") %>%
-  select(year, insurance, matage, married, residence, parity, gest, birthday2, boy, stillborn, multiple, weight, gestdummy2, matheight2, matbody2,
+  select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, gestdummy2, matheight2, matbody2,
          malnutrition2, occupation2, agemenarche, coordinates, distance, city)%>%
   mutate(coordinates=ifelse(coordinates=="", NA, coordinates),
          birth_isoweek = isoweek(dmy(birthday2)),
@@ -389,5 +389,5 @@ databern <- databern %>%
          Exposure_sum_dummy = ifelse(Exposure_sum >0,1,0)) %>%
   select(-First.Trimester.isoweek,-Second.Trimester.isoweek, -Third.Trimester.isoweek)
 
-save(databern,file=paste0("input/databern.RData"))
-write.table(databern,file=paste0("input/databern.csv"),row.names=FALSE, sep=";")
+save(databern,file=paste0("data/databern.RData"))
+write.table(databern,file=paste0("data/databern.csv"),row.names=FALSE, sep=";")

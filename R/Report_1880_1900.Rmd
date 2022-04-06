@@ -1,0 +1,159 @@
+---
+title: "Report Analysis Birthweight"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    toc_depth: 3
+    number_sections: yes
+  # word_document:
+  #   toc: yes
+  #   toc_depth: '3'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r global_options, include=FALSE,message=FALSE}
+used.data <- databern %>%
+       filter(multiple==0) %>%
+       filter(!(weight < 1500)) %>%
+       filter(!(matage > 50))  %>%
+       filter(!(matage <14)) %>%
+   filter(!(gest <30)) %>%
+  mutate(
+   Weight_quan = as.character(cut(weight, breaks=quantile(weight,probs=c(0,0.1,0.9,1)),include.lowest = TRUE)),
+   Weight_cat_quan  = Weight_quan,
+   Weight_cat_quan  = replace( Weight_cat_quan, Weight_cat_quan =="[1.5e+03,2.53e+03]","<10th percentile (< 2530 g)" ),
+   Weight_cat_quan  = replace( Weight_cat_quan, Weight_cat_quan =="(2.53e+03,3.78e+03]","10th–90th percentile (2530 - 3780 g)" ),
+   Weight_cat_quan  = replace( Weight_cat_quan, Weight_cat_quan =="(3.78e+03,5.58e+03]",">90th percentile (>3780 g)" ),
+   Weight_cat_quan = factor(Weight_cat_quan, levels = c(">90th percentile (>3780 g)", 
+                                                        "10th–90th percentile (2530 - 3780 g)",
+                                                        "<10th percentile (< 2530 g)")),
+   year = as.factor(year),
+   boy = as.factor(boy),
+   stillborn = as.factor(stillborn),
+   city = as.factor(city),
+   insurance = as.factor(insurance),
+   married = as.factor(married),
+   matbody2 = as.factor(matbody2),
+   occupation2 = as.factor(occupation2),
+   matheight2  = as.factor(matheight2 ),
+   malnutrition2 = as.factor(malnutrition2),
+   Gest_group = factor(Gest_group, levels=c("normal","early")),
+   parity = factor(parity, levels=c("1","2","3",">=4")),
+   city = factor(city, levels=c("1","0")),
+   married = factor(married, levels=c("1","0")),
+   boy = factor(boy, levels=c("1","0")),
+   birth_season = factor( birth_season, levels=c("Spring","Summer","Fall","Winter")),
+   parity = factor(parity, levels = c("1","2","3",">=4")),
+   matbody2 = factor(matbody2, levels=c("2","1","3")),
+   matheight2 = factor(matheight2, levels=c("2","1","3")),
+   malnutrition2 = factor(malnutrition2, levels=c("0","1")),
+   occupation2 = factor(occupation2, levels=c("4","1","2","3","5","6","7")),
+   Exposure_sum_dummy = as.factor(Exposure_sum_dummy)
+  )
+```
+
+# Birth weights
+
+
+## unadjusted
+
+<br />
+<br />
+Lineare regression 
+<br />
+<br />
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_year_linear")
+```
+
+Quantile regression  
+<br />
+<br />
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
+function_quantile_regression_1880(varExp="unadjusted_year_qr")
+```
+
+GAM regression 
+<br />
+<br />
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
+function_quantile_regression_1880(varExp="unadjusted_gam_model")
+```
+
+## adjusted 
+Lineare regression  
+<br />
+<br />
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
+function_quantile_regression_1880(varExp="adjusted_linear")
+```
+
+GAM regression 
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_quantile_regression_1880(varExp="adjusted_gam")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
+function_quantile_regression_1880(varExp="adjusted_gam_plot")
+```
+
+
+# Gestational age
+
+## unadjusted
+<br />
+<br />
+
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_gestage_1880(varExp="unadjusted")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5}
+function_regression_gestage_1880(varExp="unadjusted_plot")
+```
+
+
+## adjusted
+<br />
+<br />
+year
+```{r, echo=FALSE,message=TRUE,warning=FALSE}
+function_regression_gestage_1880(varExp="adjusted")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5}
+function_regression_gestage_1880(varExp="adjusted_plot")
+```
+
+# Stillborn
+
+## unadjusted
+
+<br />
+<br />
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_stillborn_1880(varExp="unadjusted")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5}
+function_regression_stillborn_1880(varExp="unadjusted_plot")
+```
+
+## adjusted
+
+<br />
+<br />
+```{r, echo=FALSE,message=TRUE,warning=FALSE}
+function_regression_stillborn_1880(varExp="adjusted_year")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5}
+function_regression_stillborn_1880(varExp="adjusted_year_plot")
+```

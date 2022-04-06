@@ -1,4 +1,4 @@
- function_regression_gestage <- function(varExp, stillbornVar) {
+function_regression_gestage <- function(varExp, stillbornVar) {
 
 datared_still_n <- used.data %>%
        mutate(year_num = as.integer(as.character(year))) %>%
@@ -63,11 +63,11 @@ if(varExp== "unadjusted" ) {
    }
 
 # else if (varExp== "unadjusted_Exp"  & stillbornVar=="yes")  {
-#    
-#    formula<-as.formula( paste("Gest_group ~ Exposure_sum"))
+# 
+#    formula<-as.formula( paste("Gest_group ~ Flu_intensity_all"))
 #    summary(mod.Gest <- glm(formula , data=datared_still_y, binomial(link = "logit")))
 #    # plot_model(mod.Gest, title =paste("Gastational age"))
-#    
+# 
 # }
 
 else if (varExp== "unadjusted_Int" )  {
@@ -90,7 +90,7 @@ else if (varExp== "unadjusted_Int_plot")  {
    else if (varExp== "adjusted" )  {
    
      
-     formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married+Exposure_sum"))
+     formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married+ insurance+Exposure_sum"))
      summary(mod.Gest <- glm(formula , data=datared_still_n, binomial(link = "logit")))
      # plot_model(mod.Gest, title =paste("Gastational age"))
      
@@ -98,7 +98,7 @@ else if (varExp== "unadjusted_Int_plot")  {
 
    else if (varExp== "adjusted_plot")  {
       
-     formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married+Exposure_sum"))
+     formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married+ insurance+Exposure_sum"))
      mod.Gest <- glm(formula , data=datared_still_n, binomial(link = "logit"))
      plot_model(mod.Gest)
      
@@ -116,7 +116,7 @@ else if (varExp== "unadjusted_Int_plot")  {
 else if (varExp== "adjusted_year" )  {
    
    
-   formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married"))
+   formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married+ insurance"))
    summary(mod.Gest <- glm(formula , data=datared_still_n, binomial(link = "logit")))
    # plot_model(mod.Gest, title =paste("Gastational age"))
    
@@ -124,7 +124,7 @@ else if (varExp== "adjusted_year" )  {
 
 else if (varExp== "adjusted_year_plot")  {
    
-   formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married"))
+   formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married+ insurance"))
    mod.Gest <- glm(formula , data=datared_still_n, binomial(link = "logit"))
    plot_model(mod.Gest)
    
@@ -133,7 +133,7 @@ else if (varExp== "adjusted_year_plot")  {
 else if (varExp== "adjusted_Exp")  {
    
    
-   formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married + Exposure_sum"))
+   formula<-as.formula( paste("Gest_group ~ boy+parity+birth_month+city+matage+ married + insurance+ Exposure_sum"))
    summary(mod.Gest <- glm(formula , data=datared_still_n, binomial(link = "logit")))
    # plot_model(mod.Gest, title =paste("Gastational age"))
    
@@ -141,24 +141,24 @@ else if (varExp== "adjusted_Exp")  {
 
 else if (varExp== "adjusted_Exp_plot")  {
    
-   formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married + Exposure_sum"))
+   formula<-as.formula( paste("Gest_group ~ boy+parity+birth_month+city+matage+ married  + insurance+ Exposure_sum"))
    mod.Gest <- glm(formula , data=datared_still_n, binomial(link = "logit"))
    plot_model(mod.Gest)
    
 }
 
-else if (varExp== "adjusted_Exp")  {
+else if (varExp== "adjusted_Int")  {
    
    
-   formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married + Flu_intensity_all"))
+   formula<-as.formula( paste("Gest_group ~ boy+parity+birth_month+city+matage+ married  + insurance+ Flu_intensity_all"))
    summary(mod.Gest <- glm(formula , data=datared_still_n, binomial(link = "logit")))
    # plot_model(mod.Gest, title =paste("Gastational age"))
    
 }
 
-else if (varExp== "adjusted_Exp_plot")  {
+else if (varExp== "adjusted_Int_plot")  {
    
-   formula<-as.formula( paste("Gest_group ~ year +boy+parity+birth_month+city+matage+ married +Flu_intensity_all"))
+   formula<-as.formula( paste("Gest_group ~ boy+parity+birth_month+city+matage+ married  + insurance+Flu_intensity_all"))
    mod.Gest <- glm(formula , data=datared_still_n, binomial(link = "logit"))
    plot_model(mod.Gest)
    

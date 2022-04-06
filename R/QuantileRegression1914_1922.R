@@ -12,7 +12,10 @@ function_quantile_regression_1914_1922 <- function(varExp) {
            Birth_year_week_num = as.numeric(birth_time),
            Exposure_sum = as.factor(Exposure_sum),
            year = as.character(year),
-           birth_month = as.factor(birth_month)) %>%
+           birth_month = as.factor(birth_month), 
+           occupation2 = recode(occupation2,
+                                "5" = "7",
+                                "6")) %>%
     droplevels
   
   if( varExp == "unadjusted_year_linear") {
@@ -249,7 +252,7 @@ function_quantile_regression_1914_1922 <- function(varExp) {
   else if( varExp == "adjusted_year_linear_Exp") {
     
     
-    qr1 <- lm(weight ~ year +boy+parity+Gest_group+birth_month+matage+ married+city + Exposure_sum , data=datared)
+    qr1 <- lm(weight ~ year +boy+parity+Gest_group+birth_month+matage+ married+city +insurance+ Exposure_sum , data=datared)
     
     summary(qr1)
   }
@@ -257,7 +260,7 @@ function_quantile_regression_1914_1922 <- function(varExp) {
   else if( varExp == "adjusted_year_linear_Int") {
     
     
-    qr1 <- lm(weight ~ year +boy+parity+Gest_group+birth_month+matage+ married+city + Flu_intensity_all, data=datared)
+    qr1 <- lm(weight ~ year +boy+parity+Gest_group+birth_month+matage+ married+city +insurance+ Flu_intensity_all, data=datared)
     
     summary(qr1)
   }
@@ -269,7 +272,7 @@ function_quantile_regression_1914_1922 <- function(varExp) {
     datared <-   datared %>%
       mutate(birth_month= as.integer(birth_month))
     
-   qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12) + boy+parity+matage+ married+city+Exposure_sum,data=datared)
+   qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12) + boy+parity+matage+ married+city+ insurance+Exposure_sum,data=datared)
    summary(qr1)
    
     
@@ -287,7 +290,7 @@ function_quantile_regression_1914_1922 <- function(varExp) {
     z <- qnorm(0.975)
     
     
-    qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12) + boy+parity+matage+ married+city+Exposure_sum,data=datared)
+    qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12) + boy+parity+matage+ married+city +insurance+Exposure_sum,data=datared)
 
     plot.data <- {
       pdf(NULL)
@@ -362,13 +365,16 @@ function_quantile_regression_1914_1922 <- function(varExp) {
     
     return(list(data.plot.time,data.plot.month))
     
+
+    
+    
   }
   
   else if( varExp == "adjusted_gam_model_gest") {
     datared <-   datared %>%
       mutate(birth_month= as.integer(birth_month))
     
-    qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12) + boy+parity+Gest_group+matage+ married+Exposure_sum,data=datared)
+    qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12) + boy+parity+Gest_group+matage+ married+city+insurance+Exposure_sum,data=datared)
     summary(qr1)
 
     
@@ -384,7 +390,7 @@ function_quantile_regression_1914_1922 <- function(varExp) {
     
     z <- qnorm(0.975)
     
-    qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12) + boy+parity+Gest_group+matage+ married+Exposure_sum,data=datared)
+    qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12) + boy+parity+Gest_group+matage+ married+insurance+Exposure_sum,data=datared)
     
     plot.data <- {
       pdf(NULL)
@@ -457,6 +463,7 @@ function_quantile_regression_1914_1922 <- function(varExp) {
     
     return(list(data.plot.time,data.plot.month))
     
+
 
     
   }

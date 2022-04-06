@@ -56,112 +56,6 @@ used.data <- databern %>%
   )
 ```
 
-
-<!-- # Table -->
-<!-- ## Example data flu -->
-<!-- To estimate the influence of flu on birth weight, stillborn or early birth, only birth with gestational age >= 30 weeks are included (423 - 5% deleted) and gestational age >42 weeks are set to 42 weeks. Otherwise unrealistic values for the flu are estimated. Furthermore only year from 1912-1913 (combined) - 1922 are included. For flu estimations even only years 1918 and 1919 are included.  -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- First.Trimester = Calender weeks of first trimester (first 13 weeks of pregnancy)  -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Second.Trimester = Calender weeks of second trimester (weeks 14-26 of pregnancy)  -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Third.Trimester = Calender weeks of third trimester (weeks 27- until birth, ranges from 27-30, until 27-42)  -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Cases.first = sum of flu cases in the first trimester (sum of 13 weeks)  -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Cases.second = sum of flu cases in the second trimester (sum of 13 weeks)  -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Cases.third = sum of flu cases in the third trimester (sum of 4 - 16 weeks, depending how long the third trimester was)  -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Cases.all = sum of all three trimesters -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Flu_intensity_first = Intensity of flu women were exposed to in the first trimester  -->
-<!-- <br/> -->
-<!-- <br /> -->
-<!-- Flu_intensity_second = Intensity of flu women were exposed to in the second trimester  -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Flu_intensity_third = Intensity of flu women were exposed to in the third trimester -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Flu_intensity_all = Intensity of flu women were exposed to in all trimester -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Exposure_sum = in how many trimesters were the women exposed (0,1,2,3) -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- Exposure_sum_dummy = was a woman exposed at all (0=no,1=yes), however this variable makes not much sense. Since a lot women were exposed in 1918 and 1919 in at least one trimester (not many 0) and nobody in the years before or after. Meaning Exposure_sum_dummy==1 are almost all cases in year 1918 and 1919 and Exposure_sum_dummy==0 all other years. So we can also only look at years... -->
-<!-- <br /> -->
-<!-- <br /> -->
-<!-- The formula of the estimation of the intensity is: min(cases))/(max(cases)-min(cases)), which leads to values between 0 and 1. I rounded it to two digits, which means a low number of cases also leads to 0.00. I used also more digits -> no difference in the results. Firstly, the intensity was calculated for all cases and secondly, it was assigned to the trimester.  -->
-
-
-<!-- ```{r Tablefull, echo=FALSE,results = "asis",message=FALSE} -->
-<!-- data.head <- used.data %>% -->
-<!--    filter(year=="1918" | year=="1919") %>% -->
-<!--    select(year,birthday2,First.Trimester =First.Trimester.weeks.range,Second.Trimester =Second.Trimester.weeks.range, -->
-<!--           Third.Trimester =Third.Trimester.weeks.range, Cases.first = Cases.rollsum.first, Cases.second=Cases.rollsum.second, -->
-<!--           Cases.third=Cases.rollsum.third, Cases.all=Cases.rollsum.all,Flu_intensity_first,Flu_intensity_second,  -->
-<!--           Flu_intensity_third, Flu_intensity_all, Exposure_sum,Exposure_dummy=Exposure_sum_dummy) -->
-<!--  data.head[c(4,160,320, 400,560,640,720, 795, 850,980,1000),] %>% -->
-<!--     kbl() %>% -->
-<!--     kable_paper("hover", full_width = F) -->
-
-<!-- ``` -->
-
-
-<!-- ## Date flu -->
-
-<!-- ```{r Tableflu, echo=FALSE,results = "asis",message=FALSE} -->
-<!-- datatab <- used.data %>% -->
-<!--   mutate(year_num = as.integer(as.character(year)), -->
-<!--          Exposure_sum = as.factor(Exposure_sum)) %>% -->
-<!--   filter(year_num >1911) %>% -->
-<!--     mutate(year=as.character(year), -->
-<!--            year=replace(year, year=="1912", "1912-1913"), -->
-<!--          year=replace(year, year=="1913", "1912-1913"))%>% -->
-<!--    select(year,birthweight=weight,stillborn ,birth_season,Gest_group,matage,parity,boy,weight,Cases.first = Cases.rollsum.first, Cases.second=Cases.rollsum.second, -->
-<!--           Cases.third=Cases.rollsum.third, Cases.all=Cases.rollsum.all,Flu_intensity_first,Flu_intensity_second,  -->
-<!--           Flu_intensity_third, Flu_intensity_all, Exposure_sum,Exposure_dummy=Exposure_sum_dummy) -->
-
-<!-- tab1 <- tableby(year ~ ., data=datatab ,test=FALSE) -->
-<!-- summary(tab1) -->
-<!-- ``` -->
-
-
-
-<!-- ## Stillborn -->
-<!-- Percentage of stillborn are larger than the BFS Swiss Data, especially in the years 1919 and 1922. But in the data of bern less married women than expected - > probably lower -->
-<!-- SES -->
-<!-- ```{r Tablestillborn, echo=FALSE,results = "asis",message=FALSE} -->
-
-
-<!-- used.data %>% -->
-<!--   mutate(year_num = as.integer(as.character(year))) %>% -->
-<!--   filter(year_num >1911) %>% -->
-<!--   group_by(year,stillborn) %>% -->
-<!--   summarise(N=n())%>% -->
-<!--   filter(!is.na(stillborn)) %>% -->
-<!--   spread(., stillborn, N) %>% -->
-<!--   mutate(alive_bfs = `0`, -->
-<!--          stillborn_bfs = `1`, -->
-<!--          percentage_stillborn_bfs = round(stillborn_bfs/alive_bfs*100,2)) %>% -->
-<!--    select(year, alive_bfs, stillborn_bfs, percentage_stillborn_bfs) %>% -->
-<!--    left_join(data.bfs.stillborn) %>% -->
-<!--    mutate(Perc_diff = percentage_stillborn_bfs - percentage_stillborn)%>% -->
-<!--        kbl(caption = "Data Bern") %>% -->
-<!--     kable_paper("hover", full_width = F) -->
-<!-- ``` -->
-
-
 # Birth weights
 
 ## Time series
@@ -232,7 +126,7 @@ function_quantile_regression_1914_1922(varExp="adjusted_gam_model_Exp")
 ```
 
 
-GAM regression and Exposure 
+GAM regression and flu intensity
 <br />
 <br />
 ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height =5, fig.width =8}

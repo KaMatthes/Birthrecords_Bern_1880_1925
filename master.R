@@ -53,18 +53,23 @@
   plot_title <- 25
   cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#D55E00", "#CC79A7")
   
-  # load data
-  # load(paste0("input/databern.RData"))
+  
+  # 
   # source(paste0("R/GrippeExposure.R"))
   # source(paste0("R/data.R"))
+  # 
+  # load data
+  load(paste0("data/databern.RData"))
+
   source(paste0("R/data_plot.R"))
   source(paste0("R/QuantileRegression1914_1922.R"))
+  source(paste0("R/QuantileRegression1880_1900.R"))
   source(paste0("R/LogRegression_Stillborn.R"))
-  source(paste0("R/LogRegression_Gestage.R"))
-
-  
-  
-  source(paste0("R/plot_kw.R")) # n
+  source(paste0("R/LogRegression_Stillborn1880_1900.R"))
+  source(paste0("R/LogRegression_Gestage1880_1900.R"))
+  source(paste0("R/plot_kw.R"))
 
   
   render(paste0("R/Report_1914_1922.Rmd"), output_file = paste0("../output/",today(),"_Report_1914_1922.html"))
+  
+  render(paste0("R/Report_1880_1900.Rmd"), output_file = paste0("../output/",today(),"_Report_1880_1900.html"))

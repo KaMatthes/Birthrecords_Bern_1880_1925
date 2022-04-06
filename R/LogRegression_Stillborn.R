@@ -55,14 +55,14 @@ summary(mod.stillborn<- glm(formula , data=datared, binomial(link = "logit")))
   
   else if(varExp== "adjusted_year") {
     
-    formula<-as.formula( paste("stillborn ~  year+boy+parity+birth_month+matage+married+city"))
+    formula<-as.formula( paste("stillborn ~  year+boy+parity+birth_month+matage+married+city+ insurance"))
     summary(mod.stillborn<- glm(formula , data=datared, binomial(link = "logit")))
     # plot_model(mod.stillborn, title = paste("stillborn",eval(substitute(varExp))))
   }
   
   else if(varExp== "adjusted_year_plot") {
 
-    formula<-as.formula( paste("stillborn ~ year+ boy+parity+birth_month+matage+married+city"))
+    formula<-as.formula( paste("stillborn ~ year+ boy+parity+birth_month+matage+married+city+ insurance"))
     mod.stillborn<- glm(formula , data=datared, binomial(link = "logit"))
     plot_model(mod.stillborn)
   }
@@ -70,28 +70,28 @@ summary(mod.stillborn<- glm(formula , data=datared, binomial(link = "logit")))
 
   else if(varExp== "adjusted_Exp") {
     
-    formula<-as.formula( paste("stillborn ~  boy+parity+birth_month+matage+married+city+Exposure_sum"))
+    formula<-as.formula( paste("stillborn ~  boy+parity+birth_month+matage+married+city+ insurance+Exposure_sum"))
     summary(mod.stillborn<- glm(formula , data=datared, binomial(link = "logit")))
     # plot_model(mod.stillborn, title = paste("stillborn",eval(substitute(varExp))))
   }
   
   else if(varExp== "adjusted_Exp_plot") {
     
-    formula<-as.formula( paste("stillborn ~  boy+parity+birth_month+matage+married+city+Exposure_sum"))
+    formula<-as.formula( paste("stillborn ~  boy+parity+birth_month+matage+married+city+ insurance+Exposure_sum"))
     mod.stillborn<- glm(formula , data=datared, binomial(link = "logit"))
     plot_model(mod.stillborn)
   }
   
   else if(varExp== "adjusted_Int") {
     
-    formula<-as.formula( paste("stillborn ~  boy+parity+birth_month+matage+married+city+Flu_intensity_all"))
+    formula<-as.formula( paste("stillborn ~  boy+parity+birth_month+matage+married+city+ insurance+Flu_intensity_all"))
     summary(mod.stillborn<- glm(formula , data=datared, binomial(link = "logit")))
     # plot_model(mod.stillborn, title = paste("stillborn",eval(substitute(varExp))))
   }
   
   else if(varExp== "adjusted_Int_plot") {
     
-    formula<-as.formula( paste("stillborn ~  boy+parity+birth_month+matage+married+city+Flu_intensity_all"))
+    formula<-as.formula( paste("stillborn ~  boy+parity+birth_month+matage+married+city+ insurance+Flu_intensity_all"))
     mod.stillborn<- glm(formula , data=datared, binomial(link = "logit"))
     plot_model(mod.stillborn)
   }

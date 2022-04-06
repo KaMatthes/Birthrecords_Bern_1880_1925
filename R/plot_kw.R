@@ -4,7 +4,7 @@ function_plot_kw <- function(Timespan) {
  
    data_kw <- used.data %>%
     mutate(year_num = as.integer(as.character(year))) %>%
-    filter(year_num >1911) %>%
+    filter(year_num >1913) %>%
     filter(stillborn=="0") %>%
     select(year, birth_isoweek,weight) %>%
     arrange(year, birth_isoweek) %>%
@@ -25,7 +25,7 @@ function_plot_kw <- function(Timespan) {
    data_w_ts <- data_kw %>%
      filter(!birth_isoweek==53) %>%
      select(weight_mean)%>%
-     ts(frequency = 52, start = 1912)
+     ts(frequency = 52, start = 1914)
    
    bp_w_ts <- breakpoints(data_w_ts ~ 1)
    
@@ -42,7 +42,7 @@ function_plot_kw <- function(Timespan) {
     
     data_month <- used.data %>%
       mutate(year_num = as.integer(as.character(year))) %>%
-      filter(year_num >1911) %>%
+      filter(year_num >1913) %>%
       filter(stillborn=="0") %>%
       select(year, birth_month,weight) %>%
       arrange(year, birth_month) %>%
@@ -51,12 +51,11 @@ function_plot_kw <- function(Timespan) {
       ungroup() %>%
       mutate(Year_week = paste0(year,"_",birth_month),
              birth_time_month = as.Date(paste0(year,"-",sprintf("%02d", birth_month),"-01"))) %>%
-      distinct(Year_week, .keep_all = TRUE) %>%
-      mutate(Color_pandemic = ifelse(year == "1918"  | year == "1919", "Pandemic", "No-Pandemic"))
+      distinct(Year_week, .keep_all = TRUE) 
     
     data_m_ts <- data_month %>%
       select(weight_mean)%>%
-      ts(frequency = 12, start = 1912)
+      ts(frequency = 12, start = 1914)
 
     bp_m_ts <- breakpoints(data_m_ts ~ 1)
     
@@ -66,6 +65,35 @@ function_plot_kw <- function(Timespan) {
       geom_vline(xintercept = 1919.333, linetype="dashed") 
       
   }
+  
+  # else if (Timespan=="weekly") {
+  #   
+  #   data_weekly <- used.data %>%
+  #     mutate(year_num = as.integer(as.character(year)),
+  #            birth_weekday = wday(dmy(birthday2),week_start = 1)) %>%
+  #     filter(year_num >1913) %>%
+  #     filter(stillborn=="0") %>%
+  #     select(year, birth_month,weight,birthday2,birth_weekday) %>%
+  #     arrange(year, birth_weekday) %>%
+  #     group_by(year, birth_weekday) %>%
+  #     mutate(weight_mean = mean(weight)) %>%
+  #     ungroup() %>%
+  #     mutate(Year_week_day = paste0(year,"_",birth_weekday),
+  #            birth_time_month = as.Date(paste0(year,"-",sprintf("%02d", birth_month),"-01"))) %>%
+  #     distinct(Year_week_day, .keep_all = TRUE) 
+  #   
+  #   data_d_ts <-data_weekly%>%
+  #     select(weight_mean)%>%
+  #     ts(frequency = 7, start = 1914)
+  #   
+  #   bp_d_ts <- breakpoints(data_d_ts ~ 1)
+  #   
+  #   data_d_ts %>%
+  #     decompose(type = "additive") %>%
+  #     autoplot(range.bars = FALSE) +
+  #     geom_vline(xintercept = 1919.333, linetype="dashed") 
+  #   
+  # }
   
 }
   
