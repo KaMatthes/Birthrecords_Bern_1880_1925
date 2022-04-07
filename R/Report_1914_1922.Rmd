@@ -118,6 +118,10 @@ GAM regression
 function_quantile_regression_1914_1922(varExp="unadjusted_gam_model")
 ```
 
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
+function_quantile_regression_1914_1922(varExp="unadjusted_gam_model_plot")
+```
+
 GAM regression and Exposure 
 <br />
 <br />

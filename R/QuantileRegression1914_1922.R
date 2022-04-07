@@ -3,19 +3,18 @@ function_quantile_regression_1914_1922 <- function(varExp) {
   datared <- used.data %>%
     mutate(year_num = as.integer(as.character(year))) %>%
     filter(year_num >1913) %>%
-    filter(stillborn =="0") %>%
+    filter(stillborn=="0") %>%
     mutate(birth_isoweek = sprintf("%02d",birth_isoweek),
            Year_week = paste0(year,"_",birth_isoweek),
            birth_isoweek_W = paste0("W",birth_isoweek),
            birthweek_year = paste0(year,"-", birth_isoweek_W,"-1"),
            birth_time = ISOweek2date( birthweek_year),
            Birth_year_week_num = as.numeric(birth_time),
-           Exposure_sum = as.factor(Exposure_sum),
            year = as.character(year),
-           birth_month = as.factor(birth_month), 
-           occupation2 = recode(occupation2,
-                                "5" = "7",
-                                "6")) %>%
+           birth_month = as.factor(birth_month),
+           occupation2 = dplyr::recode(occupation2,
+                                       "5" ="7",
+                                       "6" = "7")) %>%
     droplevels
   
   if( varExp == "unadjusted_year_linear") {
@@ -139,8 +138,20 @@ function_quantile_regression_1914_1922 <- function(varExp) {
     
   }
   
-  
   else if( varExp == "unadjusted_gam_model") {
+    
+    datared <-   datared %>%
+      mutate(birth_month= as.integer(birth_month))
+  
+    qr1 <- gam(weight ~ s(Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12),data=datared)
+  
+    summary(qr1)
+
+
+    
+    
+  }
+  else if( varExp == "unadjusted_gam_model_plot") {
 
     datared <-   datared %>%
       mutate(birth_month= as.integer(birth_month))

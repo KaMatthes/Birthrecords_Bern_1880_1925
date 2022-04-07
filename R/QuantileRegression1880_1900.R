@@ -123,7 +123,18 @@ else if( varExp == "unadjusted_year_qr") {
   
   return( CoeffPlotsum)
 }
+
 else if( varExp == "unadjusted_gam_model") {
+  
+  datared <-   datared %>%
+    mutate(birth_month= as.integer(birth_month))
+  
+  
+  qr1 <- gam(weight ~ s(Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12),data=datared)
+summary(qr1)
+  
+}
+else if( varExp == "unadjusted_gam_model_plot") {
   
   datared <-   datared %>%
     mutate(birth_month= as.integer(birth_month))

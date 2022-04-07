@@ -1,6 +1,6 @@
 function_plot <- function() {
   
-data_plot <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
+data_plot <- read.csv(paste0("../data_raw/",data.bern), header=TRUE, sep=";") %>%
   filter(multiple==0) %>%
     filter(!(gest <30)) %>%
   filter(!(weight < 1500)) %>%
@@ -238,8 +238,7 @@ boxplot_weight <- ggplot(data=data_plot)+
       colnames(Gestkattabpro) <- c("Gest_group","year","prop")
       Gestkattabpro <- na.omit(Gestkattabpro)
       Gestkattabpro <-  Gestkattabpro %>%
-        mutate(Gest_group = as.factor(Gest_group),
-               year = as.factor(year))
+        mutate(Gest_group = as.factor(Gest_group))
       
       Gestkatplot <- ggplot(data=Gestkattabpro)+
         geom_bar( aes(x =  year , y = prop,fill =  Gest_group),stat="identity")+
@@ -271,7 +270,7 @@ boxplot_weight <- ggplot(data=data_plot)+
         mutate(birth_weekday= as.factor(birth_weekday))
       
       
-      boxplot_Birthweekday <- ggplot(data=Birthweekdaytabpro)+
+      barplot_Birthweekday <- ggplot(data=Birthweekdaytabpro)+
         geom_bar( aes(x =  year , y = prop,fill =  birth_weekday),stat="identity")+
         scale_y_continuous(labels = scales::percent)+
         scale_fill_manual("Weekday",
@@ -293,16 +292,15 @@ boxplot_weight <- ggplot(data=data_plot)+
               legend.position = "top",
               axis.title.x = element_text(vjust=10))
       
+      Birthweekday <- plyr::count(data_plot, 'birth_weekday') %>%
+        mutate(prop=freq/sum(freq))
       
-      boxplot_Birthweekday_total <- ggplot(data=Birthweekdaytabpro)+
-        geom_bar( aes(x =  birth_weekday , y = prop),stat="identity")+
-        scale_y_continuous(labels = scales::percent)+
-        scale_fill_manual("Weekday",
-                          breaks=c("1","2","3","4","5","6","7"),
-                          labels=c("Monday","Tuesday","Wednesday", "Thursday","Friday","Saturday","Sunday"),
-                          values = cbp1)+
-        ylab("Weekday")+
-        xlab("")+
+      
+      barplot_Birthweekday_total <- ggplot(data=Birthweekday)+
+        geom_bar( aes(x =  birth_weekday , y = prop, fill=factor(birth_weekday)),stat="identity")+
+        scale_fill_manual("",values = c(cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],
+                                        cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1]))+
+        xlab("Weekday")+
         guides(fill=guide_legend(title="Weekday: "))+
         theme_bw()+
         theme(aspect.ratio=1,
@@ -312,10 +310,7 @@ boxplot_weight <- ggplot(data=data_plot)+
               legend.text=element_text(size=size_legend),
               legend.title =element_text(size=size_legend),
               plot.title = element_text(size=plot_title,hjust = 0.5),
-              axis.text.x = element_text(angle = 45, hjust = 1),
-              legend.position = "top",
-              axis.title.x = element_text(vjust=10))
-      
+              legend.position = "none")
       
       # boxplot_Birthmonth <- ggplot(data=data_plot)+
       #   geom_violin(aes(x=year,y=birth_month,group=year, fill=year))+
@@ -344,8 +339,7 @@ boxplot_weight <- ggplot(data=data_plot)+
       colnames( Birthmonth_catpro) <- c("Birthmonth_cat","year","prop")
      Birthmonth_catpro <- na.omit( Birthmonth_catpro)
      Birthmonth_catpro <-  Birthmonth_catpro %>%
-        mutate(boy = as.factor(Birthmonth_cat),
-               year = as.factor(year))
+        mutate(boy = as.factor(Birthmonth_cat))
       
      Birthmonth_catplot <- ggplot(data= Birthmonth_catpro)+
        geom_bar(aes(x =  year , y = prop,fill = factor(Birthmonth_cat, levels=c("12","11","10","9","8","7","6","5","4","3","2","1")))
@@ -367,12 +361,15 @@ boxplot_weight <- ggplot(data=data_plot)+
              legend.position = "top",
              axis.title.x = element_text(vjust=10))
      
-     Birthmonth_catplot_total <- ggplot(data= Birthmonth_catpro)+
-       geom_bar(aes(x =  factor(Birthmonth_cat) , y = prop),stat="identity")+
-       scale_y_continuous(labels=percent)+
-       scale_fill_manual("Birthmonth_cat",values = mypalette2)+
-       ylab("Birthmonth")+
-       xlab("")+
+     Birthmonth <- plyr::count(data_plot, 'birth_month') %>%
+       mutate(prop=freq/sum(freq))
+     
+     
+     Birthmonth_catplot_total <- ggplot(data=     Birthmonth)+
+       geom_bar(aes(x =  factor(birth_month) , y = prop, fill=factor(birth_month)),stat="identity")+
+       scale_fill_manual("",values = c(cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],
+                                       cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1]))+
+       xlab("Birthmonth")+
        guides(fill=guide_legend(title="Birthmonth: "))+
        theme_bw()+
        theme(aspect.ratio=1,
@@ -382,42 +379,40 @@ boxplot_weight <- ggplot(data=data_plot)+
              legend.text=element_text(size=size_legend),
              legend.title =element_text(size=size_legend),
              plot.title = element_text(size=plot_title,hjust = 0.5),
-             axis.text.x = element_text(angle = 45, hjust = 1),
-             legend.position = "top",
-             axis.title.x = element_text(vjust=10))
+             legend.position = "none")
      
      
      
     
      
-     Birthseason_cattab <- table(as.factor(data_plot$birth_season),data_plot$year)
-     Birthseason_catpro <- prop.table(Birthseason_cattab,2)
-     Birthseason_catpro <-melt(Birthseason_catpro)
-     colnames( Birthseason_catpro) <- c("Birthseason_cat","year","prop")
-     Birthseason_catpro <- na.omit( Birthseason_catpro)
-     Birthseason_catpro <-  Birthseason_catpro %>%
-       mutate(boy = as.factor(Birthseason_cat),
-              year = as.factor(year))
-     
-     Birthseason_catplot <- ggplot(data= Birthseason_catpro)+
-       geom_bar(aes(x =  year , y = prop,fill = Birthseason_cat)
-                ,stat="identity")+
-       scale_y_continuous(labels=percent)+
-       scale_fill_manual("Birthseason_cat",values = cbp1)+
-       ylab("Birthseason")+
-       xlab("")+
-       guides(fill=guide_legend(title="Birthseason: "))+
-       theme_bw()+
-       theme(aspect.ratio=1,
-             strip.text.x=element_text(size=strip_text),
-             axis.text=element_text(color="black",size=size_axis),
-             axis.title=element_text(size=size_axis_title),
-             legend.text=element_text(size=size_legend),
-             legend.title =element_text(size=size_legend),
-             plot.title = element_text(size=plot_title,hjust = 0.5),
-             axis.text.x = element_text(angle = 45, hjust = 1),
-             legend.position = "top",
-             axis.title.x = element_text(vjust=10))
+     # Birthseason_cattab <- table(as.factor(data_plot$birth_season),data_plot$year)
+     # Birthseason_catpro <- prop.table(Birthseason_cattab,2)
+     # Birthseason_catpro <-melt(Birthseason_catpro)
+     # colnames( Birthseason_catpro) <- c("Birthseason_cat","year","prop")
+     # Birthseason_catpro <- na.omit( Birthseason_catpro)
+     # Birthseason_catpro <-  Birthseason_catpro %>%
+     #   mutate(boy = as.factor(Birthseason_cat),
+     #          year = as.factor(year))
+     # 
+     # Birthseason_catplot <- ggplot(data= Birthseason_catpro)+
+     #   geom_bar(aes(x =  year , y = prop,fill = Birthseason_cat)
+     #            ,stat="identity")+
+     #   scale_y_continuous(labels=percent)+
+     #   scale_fill_manual("Birthseason_cat",values = cbp1)+
+     #   ylab("Birthseason")+
+     #   xlab("")+
+     #   guides(fill=guide_legend(title="Birthseason: "))+
+     #   theme_bw()+
+     #   theme(aspect.ratio=1,
+     #         strip.text.x=element_text(size=strip_text),
+     #         axis.text=element_text(color="black",size=size_axis),
+     #         axis.title=element_text(size=size_axis_title),
+     #         legend.text=element_text(size=size_legend),
+     #         legend.title =element_text(size=size_legend),
+     #         plot.title = element_text(size=plot_title,hjust = 0.5),
+     #         axis.text.x = element_text(angle = 45, hjust = 1),
+     #         legend.position = "top",
+     #         axis.title.x = element_text(vjust=10))
      
     
      Stillborntab <- table(data_plot$stillborn,data_plot$year)
@@ -714,14 +709,17 @@ boxplot_weight <- ggplot(data=data_plot)+
       #         axis.title.x = element_text(vjust=10))
       
       
-      AllCoef <- cowplot::plot_grid(boxplot_weight,Boyplot, ParaKatplot,
-                                    boxplot_Alter, boxplot_GestationalAge, Gestkatplot,
-                                    Birthmonth_catplot,Birthmonth_catplot_total,Birthmonth_catplot,
-                                    Birthmonth_catplot_total,Stillbornplot,cityplot,  
-                                    insuranceplot,marriedplot,matbodyplot,
-                                    matheightplot,malnutritionplot, occupationplot,  
+      AllCoef <- cowplot::plot_grid(boxplot_weight,Boyplot, 
+                                    ParaKatplot,boxplot_Alter, 
+                                    boxplot_GestationalAge, Gestkatplot,
+                                    barplot_Birthweekday,  barplot_Birthweekday_total, 
+                                    Birthmonth_catplot,Birthmonth_catplot_total,
+                                    Stillbornplot,cityplot,
+                                    insuranceplot,marriedplot,
+                                    matbodyplot, matheightplot,
+                                    malnutritionplot, occupationplot, 
                                     boxplot_agemenarche,
-                                    ncol=3,nrow=7)
+                                    ncol=2,nrow=10)
       
       return(AllCoef)
 }
