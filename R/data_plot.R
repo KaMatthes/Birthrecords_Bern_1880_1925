@@ -312,27 +312,6 @@ boxplot_weight <- ggplot(data=data_plot)+
               plot.title = element_text(size=plot_title,hjust = 0.5),
               legend.position = "none")
       
-      # boxplot_Birthmonth <- ggplot(data=data_plot)+
-      #   geom_violin(aes(x=year,y=birth_month,group=year, fill=year))+
-      #   geom_boxplot(aes(x=year,y=birth_month,group=year, fill=year),width=0.2)+
-      #   ylab("Birthmonth")+
-      #   ylim(1,12)+
-      #   ggtitle("Birthmonth")+
-      #   scale_fill_manual("",values = c(cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],
-      #                                   cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1],cbp1[2],cbp1[1]))+
-      #   xlab("")+
-      #   theme_bw()+
-      #   theme(aspect.ratio=1,
-      #         strip.text.x=element_text(size=strip_text),
-      #         axis.text=element_text(color="black",size=size_axis),
-      #         axis.title=element_text(size=size_axis_title),
-      #         legend.text=element_text(size=size_legend),
-      #         legend.title = element_blank(),
-      #         plot.title = element_text(size=size_legend,hjust = 0.5),
-      #         axis.text.x = element_text(angle = 45, hjust = 1),
-      #         legend.position = "none",
-      #         axis.title.x = element_text(vjust=10))
-      
      Birthmonth_cattab <- table(as.factor(data_plot$birth_month),data_plot$year)
      Birthmonth_catpro <- prop.table(Birthmonth_cattab,2)
      Birthmonth_catpro <-melt(Birthmonth_catpro)
@@ -380,40 +359,6 @@ boxplot_weight <- ggplot(data=data_plot)+
              legend.title =element_text(size=size_legend),
              plot.title = element_text(size=plot_title,hjust = 0.5),
              legend.position = "none")
-     
-     
-     
-    
-     
-     # Birthseason_cattab <- table(as.factor(data_plot$birth_season),data_plot$year)
-     # Birthseason_catpro <- prop.table(Birthseason_cattab,2)
-     # Birthseason_catpro <-melt(Birthseason_catpro)
-     # colnames( Birthseason_catpro) <- c("Birthseason_cat","year","prop")
-     # Birthseason_catpro <- na.omit( Birthseason_catpro)
-     # Birthseason_catpro <-  Birthseason_catpro %>%
-     #   mutate(boy = as.factor(Birthseason_cat),
-     #          year = as.factor(year))
-     # 
-     # Birthseason_catplot <- ggplot(data= Birthseason_catpro)+
-     #   geom_bar(aes(x =  year , y = prop,fill = Birthseason_cat)
-     #            ,stat="identity")+
-     #   scale_y_continuous(labels=percent)+
-     #   scale_fill_manual("Birthseason_cat",values = cbp1)+
-     #   ylab("Birthseason")+
-     #   xlab("")+
-     #   guides(fill=guide_legend(title="Birthseason: "))+
-     #   theme_bw()+
-     #   theme(aspect.ratio=1,
-     #         strip.text.x=element_text(size=strip_text),
-     #         axis.text=element_text(color="black",size=size_axis),
-     #         axis.title=element_text(size=size_axis_title),
-     #         legend.text=element_text(size=size_legend),
-     #         legend.title =element_text(size=size_legend),
-     #         plot.title = element_text(size=plot_title,hjust = 0.5),
-     #         axis.text.x = element_text(angle = 45, hjust = 1),
-     #         legend.position = "top",
-     #         axis.title.x = element_text(vjust=10))
-     
     
      Stillborntab <- table(data_plot$stillborn,data_plot$year)
      Stillborntabpro <- prop.table(Stillborntab,2)
@@ -675,38 +620,6 @@ boxplot_weight <- ggplot(data=data_plot)+
               axis.text.x = element_text(angle = 45, hjust = 1),
               legend.position = "none",
               axis.title.x = element_text(vjust=10))
-      
-      
-      
-      
-      # gestdummytab <- table(data_plot$gestdummy,data_plot$year)
-      # gestdummypro <- prop.table(gestdummytab,2)
-      # gestdummypro <-melt(gestdummypro)
-      # colnames(gestdummypro) <- c("gestdummy","year","prop")
-      # gestdummypro <- na.omit(gestdummypro)
-      # gestdummypro <-  gestdummypro %>%
-      #   mutate(gestdummy = as.factor(gestdummy),
-      #          year = as.factor(year))
-      # 
-      # gestdummyplot <- ggplot(data=gestdummypro)+
-      #   geom_bar(aes(x =  year , y = prop,fill =gestdummy)
-      #            ,stat="identity")+
-      #   scale_y_continuous(labels=percent)+
-      #   scale_fill_manual("gestdummy",values = cbp1)+
-      #   ylab("gestdummy")+
-      #   xlab("")+
-      #   guides(fill=guide_legend(title="gestdummy: "))+
-      #   theme_bw()+
-      #   theme(aspect.ratio=1,
-      #         strip.text.x=element_text(size=strip_text),
-      #         axis.text=element_text(color="black",size=size_axis),
-      #         axis.title=element_text(size=size_axis_title),
-      #         legend.text=element_text(size=size_legend),
-      #         legend.title =element_text(size=size_legend),
-      #         plot.title = element_text(size=plot_title,hjust = 0.5),
-      #         axis.text.x = element_text(angle = 45, hjust = 1),
-      #         legend.position = "top",
-      #         axis.title.x = element_text(vjust=10))
       
       
       AllCoef <- cowplot::plot_grid(boxplot_weight,Boyplot, 

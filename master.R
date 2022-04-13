@@ -38,6 +38,7 @@
   mypalette <- viridis(7, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
   mypalette2 <- viridis(14, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
   mypalette3 <- brewer.pal(n = 10, name = "Spectral")
+  mypalette4 <- brewer.pal(n = 5, name = "Spectral")
   cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#D55E00", "#CC79A7")
   
   size_axis <-20
@@ -62,11 +63,15 @@
   load(paste0("data/databern.RData"))
 
   source(paste0("R/data_plot.R"))
+  source(paste0("R/density_plot.R"))
   source(paste0("R/QuantileRegression1914_1922.R"))
+  source(paste0("R/QuantileRegression1914_1922_flu.R"))
   source(paste0("R/QuantileRegression1880_1900.R"))
   source(paste0("R/LogRegression_Stillborn.R"))
+  source(paste0("R/LogRegression_Stillborn_flu.R"))
   source(paste0("R/LogRegression_Stillborn1880_1900.R"))
   source(paste0("R/LogRegression_Gestage.R"))
+  source(paste0("R/LogRegression_Gestage_flu.R"))
   source(paste0("R/LogRegression_Gestage1880_1900.R"))
   source(paste0("R/plot_kw.R"))
 

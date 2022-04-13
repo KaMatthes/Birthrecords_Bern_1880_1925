@@ -42,7 +42,7 @@ if( varExp == "unadjusted_year_linear") {
     geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
     labs(x="Year", y="Birthweight difference in g") +
     ggtitle("Birth weight")+
-    scale_color_manual("Year:",values =   mypalette3)+
+    scale_color_manual("Year:",values =   mypalette4)+
     theme_bw()+
     theme(aspect.ratio=1,
           strip.text.x=element_text(size=strip_text),
@@ -109,7 +109,7 @@ else if( varExp == "unadjusted_year_qr") {
     geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Variables),position=pd,lwd=lwd_size)+
     labs(x="Quantile", y="Birthweight difference in g") +
     # ggtitle(paste((varExp)))+
-    scale_color_manual("Year:",values =   mypalette3)+
+    scale_color_manual("Year:",values =   mypalette4)+
     theme_bw()+
     theme(aspect.ratio=1,
           strip.text.x=element_text(size=strip_text),

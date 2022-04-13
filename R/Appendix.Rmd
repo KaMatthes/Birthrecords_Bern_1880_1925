@@ -1,14 +1,14 @@
 ---
-title: "Birthweights 1914 - 1922"
-author: "Katarina Matthes"
-date: "`r Sys.Date()`"
+title: "Appendix"
 output:
-  rmdformats::robobook:
-    code_folding: show
-    self_contained: true
-    highlight: pygments
-editor_options: 
-  chunk_output_type: console
+  html_document:
+    toc: yes
+    toc_float: yes
+    toc_depth: 3
+    number_sections: yes
+  # word_document:
+  #   toc: yes
+  #   toc_depth: '3'
 ---
 
 ```{r setup, include=FALSE}

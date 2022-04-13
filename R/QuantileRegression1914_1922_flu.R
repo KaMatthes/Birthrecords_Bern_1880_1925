@@ -1,4 +1,4 @@
-function_quantile_regression_1914_1922 <- function(varExp) {
+function_quantile_regression_1914_1922_flu <- function(varExp) {
   
   datared <- used.data %>%
     mutate(year_num = as.integer(as.character(year))) %>%
@@ -15,6 +15,8 @@ function_quantile_regression_1914_1922 <- function(varExp) {
            occupation2 = dplyr::recode(occupation2,
                                        "5" ="7",
                                        "6" = "7")) %>%
+    mutate(birthday2 = dmy(birthday2))%>%
+    filter(birthday2 <= ymd("1920-01-31")) %>%
     droplevels
   
   if( varExp == "unadjusted_year_linear") {
@@ -276,7 +278,6 @@ function_quantile_regression_1914_1922 <- function(varExp) {
     summary(qr1)
   }
   
-
   
   else if( varExp == "adjusted_year_linear") {
     
@@ -286,6 +287,7 @@ function_quantile_regression_1914_1922 <- function(varExp) {
     summary(qr1)
   }
   
+
   
   else if( varExp == "adjusted_gam_model") {
     

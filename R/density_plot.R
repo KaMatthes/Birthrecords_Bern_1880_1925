@@ -1,23 +1,6 @@
----
-title: "Birthweights Descriptive Analysis"
-author: "Katarina Matthes"
-date: "`r Sys.Date()`"
-output:
-  rmdformats::robobook:
-    code_folding: show
-    self_contained: true
-    highlight: pygments
-editor_options: 
-  chunk_output_type: console
----
-
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
-
-```{r global_options, include=FALSE,message=FALSE}
-data_plot <- read.csv(paste0("../data_raw/",data.bern), header=TRUE, sep=";") %>%
+function_density <- function() {
+  
+data_density <- read.csv(paste0("../data_raw/",data.bern), header=TRUE, sep=";") %>%
   filter(multiple==0) %>%
     filter(!(gest <30)) %>%
   filter(!(weight < 1500)) %>%
@@ -73,24 +56,47 @@ data_plot <- read.csv(paste0("../data_raw/",data.bern), header=TRUE, sep=";") %>
          matheight2 = factor(matheight2, levels=c("2","1","3")),
          malnutrition2 = factor(malnutrition2, levels=c("0","1")),
          occupation2 = factor(occupation2, levels=c("4","1","2","3","5","6","7")))
-         
+ 
 
-```
+data_density_old <-  data_density  %>%
+  filter(year < 1901) %>%
+  mutate(year = as.factor(year))
+  
+density_plot_old <- ggplot() +
+  geom_density(data = data_density_old, aes(x=weight, col=year), lwd=1) +
+  scale_color_manual("Year:",values =   mypalette4)+
+  theme_bw()+
+  theme(
+        strip.text.x=element_text(size=strip_text),
+        axis.text.x=element_text(color="black",size=6),
+        axis.title=element_text(size=15),
+        legend.text=element_text(size=15),
+        legend.title =element_blank(),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+      
 
-# Table
-```{r Tablefull, echo=FALSE,results = "asis",message=FALSE}
-tab1 <- tableby(year ~ weight + boy + parity + matage+stillborn+ Gest_group+city+insurance+married
-                + Gest_group+matheight2+malnutrition2+matbody2+
-                  occupation2+agemenarche, data=data_plot,test=FALSE)
-summary(tab1)
-```
+data_density_new<-  data_density  %>%
+  filter(year > 1901) %>%
+  mutate(year = as.factor(year))
 
-# Plots
-```{r , echo=FALSE, warning=FALSE, fig.height = 90, fig.width = 15,message=FALSE}
-function_plot()
-```
-
-# Density
-```{r, echo=FALSE, warning=FALSE, fig.height = 10, fig.width = 8,message=FALSE}
-function_density()
-```
+density_plot_new <- ggplot() +
+  geom_density(data = data_density_new, aes(x=weight, col=year), lwd=1) +
+  scale_color_manual("Year:",values =   mypalette3)+
+  theme_bw()+
+  theme(
+        strip.text.x=element_text(size=strip_text),
+        axis.text.x=element_text(color="black",size=6),
+        axis.title=element_text(size=15),
+        legend.text=element_text(size=15),
+        legend.title =element_blank(),
+        plot.title = element_text(size=15),
+        legend.position = "bottom")
+      
+      All_dens <- cowplot::plot_grid(density_plot_old, density_plot_new,
+                                    ncol=1,nrow=2)
+      
+      return( All_dens)
+}
+      
+     

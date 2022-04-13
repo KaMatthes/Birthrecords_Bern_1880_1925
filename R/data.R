@@ -1,4 +1,4 @@
-source(paste0("Rcode/GrippeExposure.R"))
+source(paste0("R/GrippeExposure.R"))
 
 normalit<-function(m){
   (m - min(m))/(max(m)-min(m))
@@ -204,7 +204,17 @@ databern <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
          Third.Trimester.weeks.range = replace(Third.Trimester.weeks.range,Third.Trimester.weeks.range=="52_65_1918", "52_13_1919"),
          Third.Trimester.weeks.range = replace(Third.Trimester.weeks.range,Third.Trimester.weeks.range=="52_66_1918", "52_14_1919"),
          Third.Trimester.weeks.range = replace(Third.Trimester.weeks.range,Third.Trimester.weeks.range=="52_67_1918", "52_15_1919"),
-         Third.Trimester.weeks.range = replace(Third.Trimester.weeks.range,Third.Trimester.weeks.range=="52_68_1918", "52_16_1919"))
+         Third.Trimester.weeks.range = replace(Third.Trimester.weeks.range,Third.Trimester.weeks.range=="52_68_1918", "52_16_1919"),
+         Third.Trimester.weeks.range = ifelse(Third.Trimester=="1918-12-30" & Gest_tri==11 ,"1_11_1919", Third.Trimester.weeks.range),
+         Third.Trimester.weeks.range = ifelse(Third.Trimester=="1918-12-31" & Gest_tri==12 ,"1_12_1919", Third.Trimester.weeks.range),
+         Third.Trimester.weeks.range = ifelse(Third.Trimester=="1918-12-31" & Gest_tri==16 ,"1_16_1919", Third.Trimester.weeks.range),
+         Third.Trimester.weeks.range = ifelse(Third.Trimester=="1918-12-30" & Gest_tri==16 ,"1_16_1919", Third.Trimester.weeks.range),
+         Third.Trimester.weeks.range = ifelse(Third.Trimester=="1919-12-29" & Gest_tri==16 ,"1_16_1920", Third.Trimester.weeks.range),
+         Third.Trimester.weeks.range = ifelse(Third.Trimester=="1918-12-31"  & Gest_tri==16 ,"1_16_1919", Third.Trimester.weeks.range),
+         Third.Trimester.weeks.range = ifelse(Third.Trimester=="1919-12-31"  & Gest_tri==16 ,"1_16_1920", Third.Trimester.weeks.range),
+         First.Trimester.weeks.range = ifelse(First.Trimester=="1919-12-29","1_13_1920", First.Trimester.weeks.range))
+         
+                                              
     
 databern_first <- databern %>%
   select(weeks.range=First.Trimester.weeks.range, id) %>%

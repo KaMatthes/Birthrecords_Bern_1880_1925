@@ -1,4 +1,4 @@
-function_quantile_regression_1914_1922 <- function(varExp) {
+function_quantile_regression_trimester <- function(varExp, Trimester) {
   
   datared <- used.data %>%
     mutate(year_num = as.integer(as.character(year))) %>%
@@ -15,122 +15,14 @@ function_quantile_regression_1914_1922 <- function(varExp) {
            occupation2 = dplyr::recode(occupation2,
                                        "5" ="7",
                                        "6" = "7")) %>%
+    mutate(birthday2 = dmy(birthday2))%>%
+    filter(birthday2 <= ymd("1920-01-31")) %>%
     droplevels
+ 
   
-  if( varExp == "unadjusted_year_linear") {
-
-    formula<-as.formula( paste("weight ~ year"))
-    qr1 <- lm(formula , data=datared)
-    qr1_sum <- summary(qr1)
-    
-    qr1_results <- data.frame(qr1_sum$coefficients) %>%
-      mutate( CIl = Estimate-1.96*Std..Error,
-              CIu = Estimate+1.96*Std..Error,
-              Year = row.names(.)) %>%
-      select(Year, Estimate, CIl, CIu) %>%
-      add_row(Year = "year1914", Estimate =0, CIl=0, CIu=0) %>%
-      filter(!Year =="(Intercept)")
-    
-    
-    CoeffPlotsum <- ggplot(  qr1_results, aes(x=Year,y=Estimate),position=pd) + 
-      geom_hline(yintercept=0, colour="grey") + 
-      geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
-      labs(x="Year", y="Birthweight difference in g") +
-      ggtitle("Birth weight")+
-      scale_color_manual("Year:",values =   mypalette3)+
-      theme_bw()+
-      theme(aspect.ratio=1,
-            strip.text.x=element_text(size=strip_text),
-            axis.text.x=element_text(color="black",size=6),
-            axis.title=element_text(size=15),
-            legend.text=element_text(size=15),
-            legend.title =element_blank(),
-            plot.title = element_text(size=15),
-            legend.position = "none")
+ 
   
-    return( CoeffPlotsum)
-  }
-  
-  
-  
-  else if( varExp == "unadjusted_year_qr") {
-    
-    formula<-as.formula( paste("weight ~ year"))
-    qr1 <- rq(formula , data=datared , tau =c(0.1, 0.5, 0.9))
-    
-    # plot(summary(qr1))
-    
-    qr1_sum <- summary(qr1,se = "boot", bsmethod= "xy")
-    
-    qr1_std_error01 <- qr1_sum[[1]][3]$coefficients[,2] %>%
-      as.data.frame() %>%
-      rename(sd_error = ".") %>%
-      mutate(Variables = row.names(.),
-             quantile = 0.1)
-    
-    qr1_std_error05 <-qr1_sum[[2]][3]$coefficients[,2] %>%
-      as.data.frame() %>%
-      rename(sd_error = ".") %>%
-      mutate(Variables = row.names(.),
-             quantile = 0.5)
-    
-    qr1_std_error09 <-qr1_sum[[3]][3]$coefficients[,2]%>%
-      as.data.frame() %>%
-      rename(sd_error = ".") %>%
-      mutate(Variables = row.names(.),
-             quantile = 0.9)
-    
-    qr1_std_error <- rbind(qr1_std_error01, qr1_std_error05,qr1_std_error09)
-    
-    data_qr1 <- qr1$coefficients %>%
-      as.data.frame()%>%
-      mutate(Variables=row.names(.)) %>%
-      gather(., condition, measurement, `tau= 0.1`:`tau= 0.9`,factor_key=TRUE)%>%
-      mutate(quantile = as.numeric(substr(condition,6,8))) %>%
-      select(-condition) %>%
-      left_join(qr1_std_error) %>%
-      mutate(CIl = measurement-1.96*sd_error,
-             CIu = measurement+1.96*sd_error,
-             quantile = as.factor(quantile))
-    
-    
-    data_sum <- data_qr1 %>%
-      filter(!Variables=="(Intercept)") %>%
-      mutate(Variables=as.factor(Variables))%>%
-      add_row(Variables = c("year1914","year1914","year1914"), measurement = c(0,0,0),
-              quantile=c("0.1","0.5","0.9"),sd_error=c(0,0,0),CIl=c(0,0,0),CIu=c(0,0,0))
-    
-    
-    CoeffPlotsum <- ggplot( data_sum , aes(x=quantile, y=measurement),position=pd) + 
-      geom_hline(yintercept=0, colour="grey") + 
-      geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Variables),position=pd,lwd=lwd_size)+
-      labs(x="Quantile", y="Birthweight difference in g") +
-      # ggtitle(paste((varExp)))+
-      scale_color_manual("Year:",values =   mypalette3)+
-      theme_bw()+
-      theme(aspect.ratio=1,
-            strip.text.x=element_text(size=strip_text),
-            axis.text=element_text(color="black",size=15),
-            axis.title=element_text(size=15),
-            legend.text=element_text(size=15),
-            legend.title =element_blank(),
-            plot.title = element_text(size=15),
-            legend.position = "bottom")
-    
-    
-    return( CoeffPlotsum)
-  }
-  
-  else if( varExp == "linear_Exp") {
-    
-    qr1 <- lm(weight ~ Exposure_sum , data=datared)
-    
-    summary(qr1)
-    
-  }
-  
-  
-  else if( varExp == "linear_Int") {
+  if( varExp == "linear_Int") {
     
     qr1 <- lm(weight ~ Flu_intensity_all , data=datared)
     
@@ -276,7 +168,6 @@ function_quantile_regression_1914_1922 <- function(varExp) {
     summary(qr1)
   }
   
-
   
   else if( varExp == "adjusted_year_linear") {
     
@@ -286,6 +177,7 @@ function_quantile_regression_1914_1922 <- function(varExp) {
     summary(qr1)
   }
   
+
   
   else if( varExp == "adjusted_gam_model") {
     

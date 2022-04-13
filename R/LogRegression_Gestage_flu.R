@@ -1,4 +1,4 @@
-function_regression_gestage <- function(varExp, stillbornVar) {
+function_regression_gestage_flu <- function(varExp, stillbornVar) {
 
 datared_still_n <- used.data %>%
        mutate(year_num = as.integer(as.character(year))) %>%
@@ -12,21 +12,23 @@ datared_still_n <- used.data %>%
               Exposure_sum=as.factor(Exposure_sum),
               birth_month = as.factor(birth_month))%>%
        filter(stillborn=="0") %>%
+   mutate(birthday2 = dmy(birthday2))%>%
+       filter(birthday2 <= ymd("1920-01-31")) %>%
        droplevels
 
 
-datared_still_y <- used.data %>%
-   mutate(year_num = as.integer(as.character(year))) %>%
-   filter(year_num >1913) %>%
-   droplevels %>%
-   mutate(year = as.character(year),
-          Gest_group = as.character(Gest_group),
-          Gest_group=replace(Gest_group, Gest_group=="normal", "0"),
-          Gest_group=replace(Gest_group, Gest_group=="early", "1"),
-          Gest_group = as.factor(Gest_group),
-          Exposure_sum=as.factor(Exposure_sum),
-          birth_month = as.factor(birth_month))%>%
-   droplevels
+# datared_still_y <- used.data %>%
+#    mutate(year_num = as.integer(as.character(year))) %>%
+#    filter(year_num >1913) %>%
+#    droplevels %>%
+#    mutate(year = as.character(year),
+#           Gest_group = as.character(Gest_group),
+#           Gest_group=replace(Gest_group, Gest_group=="normal", "0"),
+#           Gest_group=replace(Gest_group, Gest_group=="early", "1"),
+#           Gest_group = as.factor(Gest_group),
+#           Exposure_sum=as.factor(Exposure_sum),
+#           birth_month = as.factor(birth_month))%>%
+#    droplevels
 
     
 # data
