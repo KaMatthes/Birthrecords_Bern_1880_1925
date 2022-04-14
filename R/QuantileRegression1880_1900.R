@@ -56,6 +56,73 @@ if( varExp == "unadjusted_year_linear") {
     return( CoeffPlotsum)
 }
 
+
+else if( varExp == "unadjusted_boy_linear") {
+  formula<-as.formula( paste("weight ~ boy"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
+else if( varExp == "unadjusted_parity_linear") {
+  formula<-as.formula( paste("weight ~ parity"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
+else if( varExp == "unadjusted_gest_linear") {
+  formula<-as.formula( paste("weight ~ Gest_group"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
+else if( varExp == "unadjusted_month_linear") {
+  formula<-as.formula( paste("weight ~ birth_month"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
+else if( varExp == "unadjusted_matheight_linear") {
+  formula<-as.formula( paste("weight ~ matheight2"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
+else if( varExp == "unadjusted_malnutrition_linear") {
+  formula<-as.formula( paste("weight ~ malnutrition2"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
+else if( varExp == "unadjusted_matbody_linear") {
+  formula<-as.formula( paste("weight ~ matbody2"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
+else if( varExp == "unadjusted_occupation_linear") {
+  formula<-as.formula( paste("weight ~ occupation2"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
+else if( varExp == "unadjusted_matage_linear") {
+  formula<-as.formula( paste("weight ~ matage"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
+else if( varExp == "unadjusted_agemenarche_linear") {
+  formula<-as.formula( paste("weight ~ agemenarche"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
+else if( varExp == "unadjusted_city_linear") {
+  formula<-as.formula( paste("weight ~ city"))
+  qr1 <- lm(formula , data=datared)
+  summary(qr1)
+}
+
 else if( varExp == "unadjusted_year_qr") {
   
   formula<-as.formula( paste("weight ~ year"))
@@ -219,14 +286,49 @@ else if( varExp == "unadjusted_gam_model_plot") {
   
 }
 else if( varExp == "adjusted_linear") {
-  
-  
   qr1 <- lm(weight ~ year+boy+parity+Gest_group+birth_month+matheight2+malnutrition2+
-              matbody2+occupation2+matage+agemenarche +city, data=datared)
-  
+            matbody2+matage+agemenarche +city, data=datared)
   summary(qr1)
 }
 
+else if( varExp == "adjusted_linear_plot") {
+  
+  qr1 <- lm(weight ~ year+boy+parity+Gest_group+birth_month+matheight2+malnutrition2+
+              matbody2+matage+agemenarche +city, data=datared)
+  qr1_sum <- summary(qr1)
+  
+qr1_results <- data.frame(qr1_sum$coefficients)[2:5,] %>%
+  mutate( CIl = Estimate-1.96*Std..Error,
+          CIu = Estimate+1.96*Std..Error,
+          Year = row.names(.)) %>%
+  select(Year, Estimate, CIl, CIu) %>%
+  add_row(Year = "year1880", Estimate =0, CIl=0, CIu=0) %>%
+  filter(!Year =="(Intercept)")
+
+
+CoeffPlotsum <- ggplot(  qr1_results, aes(x=Year,y=Estimate),position=pd) + 
+  geom_hline(yintercept=0, colour="grey") + 
+  geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
+  labs(x="Year", y="Birthweight difference in g") +
+  ggtitle("Birth weight")+
+  scale_color_manual("Year:",values =   mypalette4)+
+  theme_bw()+
+  theme(aspect.ratio=1,
+        strip.text.x=element_text(size=strip_text),
+        axis.text.x=element_text(color="black",size=6),
+        axis.title=element_text(size=15),
+        legend.text=element_text(size=15),
+        legend.title =element_blank(),
+        plot.title = element_text(size=15),
+        legend.position = "none")
+return(CoeffPlotsum)
+}
+
+else if( varExp == "adjusted_linear_occupation") {
+  qr1 <- lm(weight ~ year+boy+occupation2+Gest_group+birth_month+matheight2+malnutrition2+
+              matbody2+matage+agemenarche +city, data=datared)
+  summary(qr1)
+}
 
 else if( varExp == "adjusted_gam") {
   datared <-   datared %>%

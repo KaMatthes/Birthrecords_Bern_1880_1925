@@ -94,8 +94,47 @@ function_quantile_regression_1914_1922(varExp="unadjusted_year_qr")
 function_quantile_regression_1914_1922(varExp="unadjusted_year_linear")
 ```
 
+### Sex
 
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1914_1922(varExp="unadjusted_boy_linear")
+```
 
+### Gestational age
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1914_1922(varExp="unadjusted_gest_linear")
+```
+
+### Birth month
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1914_1922(varExp="unadjusted_month_linear")
+```
+
+### Maternal age
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1914_1922(varExp="unadjusted_matage_linear")
+```
+
+### Married
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1914_1922(varExp="unadjusted_married_linear")
+```
+
+### City
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1914_1922(varExp="unadjusted_city_linear")
+```
+
+### Insurance
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1914_1922(varExp="unadjusted_insurance_linear")
+```
 <!-- Lineare regression only Exposure -->
 <!-- <br /> -->
 <!-- <br /> -->
@@ -148,6 +187,9 @@ function_quantile_regression_1914_1922_flu(varExp="linear_Int")
 function_quantile_regression_1914_1922(varExp="adjusted_year_linear")
 ```
 
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_quantile_regression_1914_1922(varExp="adjusted_year_linear_plot")
+```
 <!-- Exposure sum -->
 <!-- ```{r, echo=FALSE, message=TRUE,warning=FALSE} -->
 <!-- function_quantile_regression_1914_1922(varExp="adjusted_year_linear_Exp") -->

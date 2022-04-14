@@ -55,7 +55,10 @@ data_plot <- read.csv(paste0("../data_raw/",data.bern), header=TRUE, sep=";") %>
          matbody2 = factor(matbody2, levels=c("2","1","3")),
          matheight2 = factor(matheight2, levels=c("2","1","3")),
          malnutrition2 = factor(malnutrition2, levels=c("0","1")),
-         occupation2 = factor(occupation2, levels=c("4","1","2","3","5","6","7")))
+         occupation2 = dplyr::recode(occupation2,
+                                     "5" ="7",
+                                     "6" = "7"),
+         occupation2 = factor(occupation2, levels=c("4","1","2","3","7")))
          
   
 boxplot_weight <- ggplot(data=data_plot)+
@@ -584,7 +587,7 @@ boxplot_weight <- ggplot(data=data_plot)+
         scale_y_continuous(labels = scales::percent)+
         scale_fill_manual("occupation",
                           breaks=c("1","2","3","4","5","6","7"),
-                          labels=c("Landarbeiterin","Magd","Fabrikarbeiterin", "Hausfrau","Schneiderin","andere","Köchin"),
+                          labels=c("Landarbeiterin","Magd","Arbeiterin", "Hausfrau","other"),
                           values = cbp1)+
         ylab("occupation")+
         xlab("")+

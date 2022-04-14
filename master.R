@@ -66,11 +66,14 @@
   source(paste0("R/density_plot.R"))
   source(paste0("R/QuantileRegression1914_1922.R"))
   source(paste0("R/QuantileRegression1914_1922_flu.R"))
+  source(paste0("R/QuantileRegression_flu_trimester.R"))
   source(paste0("R/QuantileRegression1880_1900.R"))
   source(paste0("R/LogRegression_Stillborn.R"))
   source(paste0("R/LogRegression_Stillborn_flu.R"))
+  source(paste0("R/LogRegression_Stillborn_trimester.R"))
   source(paste0("R/LogRegression_Stillborn1880_1900.R"))
   source(paste0("R/LogRegression_Gestage.R"))
+  source(paste0("R/LogRegression_Gestage_trimester.R"))
   source(paste0("R/LogRegression_Gestage_flu.R"))
   source(paste0("R/LogRegression_Gestage1880_1900.R"))
   source(paste0("R/plot_kw.R"))
@@ -78,5 +81,6 @@
   
   render(paste0("R/Report_1914_1922.Rmd"), output_file = paste0("../output/",today(),"_Report_1914_1922.html"))
   render(paste0("R/Report_1880_1900.Rmd"), output_file = paste0("../output/",today(),"_Report_1880_1900.html"))
+  render(paste0("R/Appendix.Rmd"), output_file = paste0("../output/",today(),"_Appendix.html"))
   
   render(paste0("R/Report_descriptive.Rmd"), output_file = paste0("../output/",today(),"_Report_descriptive.html"))

@@ -61,20 +61,89 @@ used.data <- databern %>%
 
 ## unadjusted
 
-<br />
-<br />
-Lineare regression 
-<br />
-<br />
+
+### Quantile regression  
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
+function_quantile_regression_1880(varExp="unadjusted_year_qr")
+```
+
+
+### Year
+
 ```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
 function_quantile_regression_1880(varExp="unadjusted_year_linear")
 ```
 
-Quantile regression  
-<br />
-<br />
-```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
-function_quantile_regression_1880(varExp="unadjusted_year_qr")
+### Sex
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_boy_linear")
+```
+
+### Parity
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_parity_linear")
+```
+
+### Gestational age
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_gest_linear")
+```
+
+
+### Birth month
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_month_linear")
+```
+
+### Maternal height
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_matheight_linear")
+```
+
+
+### Malnutrition
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_malnutrition_linear")
+```
+
+
+### Maternal bodysize
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_matbody_linear")
+```
+
+### Occupation
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_occupation_linear")
+```
+
+
+### Maternal Age
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_matage_linear")
+```
+
+### Age menarche
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_agemenarche_linear")
+```
+
+
+### City
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5 ,fig.width = 5}
+function_quantile_regression_1880(varExp="unadjusted_city_linear")
 ```
 
 <!-- GAM regression  -->
@@ -89,12 +158,20 @@ function_quantile_regression_1880(varExp="unadjusted_year_qr")
 <!-- ``` -->
 
 ## adjusted 
-Lineare regression  
-<br />
-<br />
 
+### Parity
 ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
 function_quantile_regression_1880(varExp="adjusted_linear")
+```
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
+function_quantile_regression_1880(varExp="adjusted_linear_plot")
+```
+
+
+### Occupation
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
+function_quantile_regression_1880(varExp="adjusted_linear_occupation")
 ```
 
 <!-- GAM regression  -->

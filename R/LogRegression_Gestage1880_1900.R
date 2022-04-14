@@ -12,7 +12,8 @@ datared_still <- used.data %>%
               birth_month = as.factor(birth_month),
               occupation2 = dplyr::recode(occupation2,
                                                  "5" ="7",
-                                                 "6" = "7")) %>%
+                                                 "6" = "7"),
+              occupation2 = levels( occupation2 = )) %>%
        filter(stillborn=="0") %>%
    
        droplevels
