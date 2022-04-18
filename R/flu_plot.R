@@ -148,7 +148,7 @@ flu_intensity4_plot <- ggplot() +
   theme_bw()+
   theme(
     strip.text.x=element_text(size=10),
-    axis.text=element_text(color="black",size=10),
+    axis.text=element_text(color="black",size=8),
     axis.title=element_text(size=10),
     legend.text=element_text(size=10),
     legend.title =element_text(size=10),

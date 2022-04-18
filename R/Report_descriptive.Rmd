@@ -114,6 +114,6 @@ F) Rolls sum of 4 weeks (if third trimester is only 4 weeks long)
 G) Flu intensity for roll sum of 4 weeks 
 
 
-```{r, echo=FALSE, warning=FALSE, fig.height = 25, fig.width = 8,message=FALSE}
+```{r, echo=FALSE, warning=FALSE, fig.height = 30, fig.width = 8,message=FALSE}
 function_flu_plot()
 ```
