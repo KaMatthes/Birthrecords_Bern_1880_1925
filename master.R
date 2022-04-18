@@ -64,6 +64,7 @@
 
   source(paste0("R/data_plot.R"))
   source(paste0("R/density_plot.R"))
+  source(paste0("R/flu_plot.R"))
   source(paste0("R/QuantileRegression1914_1922.R"))
   source(paste0("R/QuantileRegression1914_1922_flu.R"))
   source(paste0("R/QuantileRegression_flu_trimester.R"))
@@ -84,3 +85,4 @@
   render(paste0("R/Appendix.Rmd"), output_file = paste0("../output/",today(),"_Appendix.html"))
   
   render(paste0("R/Report_descriptive.Rmd"), output_file = paste0("../output/",today(),"_Report_descriptive.html"))
+  

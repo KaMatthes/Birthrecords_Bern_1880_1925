@@ -586,7 +586,7 @@ boxplot_weight <- ggplot(data=data_plot)+
         geom_bar( aes(x =  year , y = prop,fill =  occupation),stat="identity")+
         scale_y_continuous(labels = scales::percent)+
         scale_fill_manual("occupation",
-                          breaks=c("1","2","3","4","5","6","7"),
+                          breaks=c("1","2","3","4","7"),
                           labels=c("Landarbeiterin","Magd","Arbeiterin", "Hausfrau","other"),
                           values = cbp1)+
         ylab("occupation")+

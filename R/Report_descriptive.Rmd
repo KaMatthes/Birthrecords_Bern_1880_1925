@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r global_options, include=FALSE,message=FALSE}
-data_plot <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
+data_plot <- read.csv(paste0("../data_raw/",data.bern), header=TRUE, sep=";") %>%
     filter(!year=="1901") %>%
     filter(!year=="1902") %>%
     filter(!year=="1903") %>%
@@ -99,4 +99,21 @@ function_plot()
 # Density
 ```{r, echo=FALSE, warning=FALSE, fig.height = 10, fig.width = 8,message=FALSE}
 function_density()
+```
+
+
+# Flu Cases
+
+A) Number of cases for each calender week
+B) Roll sum for 12 weeks (e.g. 1918_w52 shows the sum from 1918_w41 to 1918_w52,  1919_w1 shows the sum from 1918_w42 to 1919_w1). If a women 
+has for example one of the trimester from  1918_w41 to 1918_w52, she was exposed during 12 weeks to 75'078 cases, which leads to
+C) a flu intensity for roll sum of 12 weeks: 0.92
+D) Rolls sum of 16 weeks (if third trimester is longer)
+E) Flu intensity for roll sum of 16 weeks
+F) Rolls sum of 4 weeks (if third trimester is only 4 weeks long)
+G) Flu intensity for roll sum of 4 weeks 
+
+
+```{r, echo=FALSE, warning=FALSE, fig.height = 25, fig.width = 8,message=FALSE}
+function_flu_plot()
 ```
