@@ -1,18 +1,19 @@
 function_plot <- function() {
   
-data_plot <- read.csv(paste0("../data_raw/",data.bern), header=TRUE, sep=";") %>%
+data_plot <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
+  filter(!year=="1901") %>%
+  filter(!year=="1902") %>%
+  filter(!year=="1903") %>%
+  filter(!year=="1911") %>%
+  filter(!year=="1912") %>%
+  filter(!year=="1913") %>%
+  filter(!year=="1923") %>%
   filter(multiple==0) %>%
     filter(!(gest <30)) %>%
   filter(!(weight < 1500)) %>%
   filter(!(matage > 50))  %>%
   filter(!(matage <14)) %>%
-    filter(!year=="1901") %>%
-    filter(!year=="1902") %>%
-    filter(!year=="1903") %>%
-    filter(!year=="1911") %>%
-    filter(!year=="1912") %>%
-    filter(!year=="1913") %>%
-    filter(!year=="1923") %>%
+
     select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, gestdummy2, matheight2, matbody2,
            malnutrition2, occupation2, agemenarche, coordinates, distance, city)%>%
     mutate(coordinates=ifelse(coordinates=="", NA, coordinates),
