@@ -82,8 +82,8 @@ function_plot_kw(Timespan="weekly")
 
 The quantile regression does not provide any further information. The results are similar when using the quantile and linear regressions. No significant differences between the quantiles are found for the years 1918 and 1919. 
 
-<br />
-<br />
+### Quantile regression  
+
 ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
 function_quantile_regression_1914_1922(varExp="unadjusted_year_qr")
 ```
@@ -153,6 +153,11 @@ function_quantile_regression_1914_1922(varExp="linear_Int")
 function_quantile_regression_1914_1922_flu(varExp="linear_Int")
 ```
 
+### Flu intensity - Quantile Regression
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
+function_quantile_regression_1914_1922(varExp="unadjusted_flu_qr")
+```
 <!-- GAM regression  -->
 <!-- <br /> -->
 <!-- <br /> -->
@@ -181,6 +186,12 @@ function_quantile_regression_1914_1922_flu(varExp="linear_Int")
 
 ## adjusted 
 
+### Quantile regression  
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
+function_quantile_regression_1914_1922(varExp="adjusted_year_qr")
+```
+
 ### Year
 
 ```{r, echo=FALSE, message=TRUE,warning=FALSE}
@@ -204,6 +215,11 @@ function_quantile_regression_1914_1922(varExp="adjusted_year_linear_Int")
 ### Flu Intensity - 01.01.1914 - 31.01.1920
 ```{r, echo=FALSE, message=TRUE,warning=FALSE}
 function_quantile_regression_1914_1922_flu(varExp="adjusted_year_linear_Int")
+```
+
+### Flu Intensity - Quantile Regression
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
+function_quantile_regression_1914_1922(varExp="adjusted_flu_qr")
 ```
 <!-- GAM regression  without gestational age -->
 <!-- <br /> -->
@@ -292,6 +308,12 @@ function_regression_gestage_flu(varExp="unadjusted_Int_plot")
 ```
 
 ## adjusted
+
+### Quantile regression  
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
+function_quantile_regression_1914_1922(varExp="adjusted_year_qr")
+```
 
 ### Year
 ```{r, echo=FALSE,message=TRUE,warning=FALSE}

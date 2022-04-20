@@ -19,9 +19,6 @@ datared <- used.data %>%
   droplevels
 
 
-
-
-
 if( varExp == "unadjusted_year_linear") {
   
   formula<-as.formula( paste("weight ~ year"))
@@ -42,7 +39,7 @@ if( varExp == "unadjusted_year_linear") {
     geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
     labs(x="Year", y="Birthweight difference in g") +
     ggtitle("Birth weight")+
-    scale_color_manual("Year:",values =   mypalette4)+
+    scale_color_manual("Year:",values =  mypalette7)+
     theme_bw()+
     theme(aspect.ratio=1,
           strip.text.x=element_text(size=strip_text),
@@ -176,7 +173,7 @@ else if( varExp == "unadjusted_year_qr") {
     geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Variables),position=pd,lwd=lwd_size)+
     labs(x="Quantile", y="Birthweight difference in g") +
     # ggtitle(paste((varExp)))+
-    scale_color_manual("Year:",values =   mypalette4)+
+    scale_color_manual("Year:",values =   mypalette7)+
     theme_bw()+
     theme(aspect.ratio=1,
           strip.text.x=element_text(size=strip_text),
@@ -191,100 +188,99 @@ else if( varExp == "unadjusted_year_qr") {
   return( CoeffPlotsum)
 }
 
-else if( varExp == "unadjusted_gam_model") {
-  
-  datared <-   datared %>%
-    mutate(birth_month= as.integer(birth_month))
-  
-  
-  qr1 <- gam(weight ~ s(Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12),data=datared)
-summary(qr1)
-  
-}
-else if( varExp == "unadjusted_gam_model_plot") {
-  
-  datared <-   datared %>%
-    mutate(birth_month= as.integer(birth_month))
-  
-  format_x <- function(x){ 
-    as.Date(x)
-  }
-  
-  z <- qnorm(0.975)
-  
-  qr1 <- gam(weight ~ s(Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12),data=datared)
-  
-  plot.data <- {
-    pdf(NULL)
-    res <- plot(qr1)
-    invisible(dev.off())
-    res
-  }
-  
-  data.plot.time <- data.frame(x=plot.data[[1]]$x) %>%
-    mutate(fit =  plot.data[[1]]$fit,
-           se  =  plot.data[[1]]$se,
-           CIl =  fit - z*se,
-           CIu =  fit + z*se) %>%
-    select(-se) %>%
-    gather(., variable, value, fit:CIu ) %>%
-    ggplot() +
-    geom_line(aes(x=x,y=value, col=variable,linetype=variable),lwd=lwdline)+
-    xlab("Birth date")+
-    ylab("Effect on Birthweight")+
-    scale_x_continuous(labels=format_x )+
-    scale_colour_manual("",
-                        values = c("#555555","#555555","#555555"),
-                        limits=c("fit","CIl","CIu"),
-                        labels=c("fully adjusted","95% CI","95% CI"))+
-    scale_linetype_manual(name= "",
-                          limits=c("fit","CIl","CIu"),
-                          labels=c("fit","95% CI","95% CI"),
-                          values =c("solid","52","52"))+
-    theme_bw()+
-    theme(
-      strip.text.x=element_text(size=strip_text),
-      axis.text=element_text(color="black",size=10),
-      axis.title=element_text(size=10),
-      legend.text=element_text(size=size_legend),
-      legend.title=element_text(size=size_legend_title),
-      legend.position="none")
-  
-  
-  data.plot.month <- data.frame(x=plot.data[[2]]$x) %>%
-    mutate(fit =  plot.data[[2]]$fit,
-           se  =  plot.data[[2]]$se,
-           CIl =  fit - z*se,
-           CIu =  fit + z*se) %>%
-    select(-se) %>%
-    gather(., variable, value, fit:CIu ) %>%
-    ggplot() +
-    geom_line(aes(x=x,y=value, col=variable,linetype=variable),lwd=lwdline)+
-    xlab("Birth month")+
-    ylab("Effect on Birthweight")+
-    scale_colour_manual("",
-                        values = c("#555555","#555555","#555555"),
-                        limits=c("fit","CIl","CIu"),
-                        labels=c("fully adjusted","95% CI","95% CI"))+
-    scale_linetype_manual(name= "",
-                          limits=c("fit","CIl","CIu"),
-                          labels=c("fit","95% CI","95% CI"),
-                          values =c("solid","52","52"))+
-    theme_bw()+
-    theme(
-      strip.text.x=element_text(size=strip_text),
-      axis.text=element_text(color="black",size=10),
-      axis.title=element_text(size=10),
-      legend.text=element_text(size=size_legend),
-      legend.title=element_text(size=size_legend_title),
-      legend.position="none")
-  
-  
-  
-  return(list(data.plot.time,data.plot.month))
-  
-  
-}
+# else if( varExp == "unadjusted_gam_model") {
+#   
+#   datared <-   datared %>%
+#     mutate(birth_month= as.integer(birth_month))
+#   
+#   
+#   qr1 <- gam(weight ~ s(Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12),data=datared)
+# summary(qr1)
+#   
+# }
+# else if( varExp == "unadjusted_gam_model_plot") {
+#   
+#   datared <-   datared %>%
+#     mutate(birth_month= as.integer(birth_month))
+#   
+#   format_x <- function(x){ 
+#     as.Date(x)
+#   }
+#   
+#   z <- qnorm(0.975)
+#   
+#   qr1 <- gam(weight ~ s(Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12),data=datared)
+#   
+#   plot.data <- {
+#     pdf(NULL)
+#     res <- plot(qr1)
+#     invisible(dev.off())
+#     res
+#   }
+#   
+#   data.plot.time <- data.frame(x=plot.data[[1]]$x) %>%
+#     mutate(fit =  plot.data[[1]]$fit,
+#            se  =  plot.data[[1]]$se,
+#            CIl =  fit - z*se,
+#            CIu =  fit + z*se) %>%
+#     select(-se) %>%
+#     gather(., variable, value, fit:CIu ) %>%
+#     ggplot() +
+#     geom_line(aes(x=x,y=value, col=variable,linetype=variable),lwd=lwdline)+
+#     xlab("Birth date")+
+#     ylab("Effect on Birthweight")+
+#     scale_x_continuous(labels=format_x )+
+#     scale_colour_manual("",
+#                         values = c("#555555","#555555","#555555"),
+#                         limits=c("fit","CIl","CIu"),
+#                         labels=c("fully adjusted","95% CI","95% CI"))+
+#     scale_linetype_manual(name= "",
+#                           limits=c("fit","CIl","CIu"),
+#                           labels=c("fit","95% CI","95% CI"),
+#                           values =c("solid","52","52"))+
+#     theme_bw()+
+#     theme(
+#       strip.text.x=element_text(size=strip_text),
+#       axis.text=element_text(color="black",size=10),
+#       axis.title=element_text(size=10),
+#       legend.text=element_text(size=size_legend),
+#       legend.title=element_text(size=size_legend_title),
+#       legend.position="none")
+#   
+#   
+#   data.plot.month <- data.frame(x=plot.data[[2]]$x) %>%
+#     mutate(fit =  plot.data[[2]]$fit,
+#            se  =  plot.data[[2]]$se,
+#            CIl =  fit - z*se,
+#            CIu =  fit + z*se) %>%
+#     select(-se) %>%
+#     gather(., variable, value, fit:CIu ) %>%
+#     ggplot() +
+#     geom_line(aes(x=x,y=value, col=variable,linetype=variable),lwd=lwdline)+
+#     xlab("Birth month")+
+#     ylab("Effect on Birthweight")+
+#     scale_colour_manual("",
+#                         values = c("#555555","#555555","#555555"),
+#                         limits=c("fit","CIl","CIu"),
+#                         labels=c("fully adjusted","95% CI","95% CI"))+
+#     scale_linetype_manual(name= "",
+#                           limits=c("fit","CIl","CIu"),
+#                           labels=c("fit","95% CI","95% CI"),
+#                           values =c("solid","52","52"))+
+#     theme_bw()+
+#     theme(
+#       strip.text.x=element_text(size=strip_text),
+#       axis.text=element_text(color="black",size=10),
+#       axis.title=element_text(size=10),
+#       legend.text=element_text(size=size_legend),
+#       legend.title=element_text(size=size_legend_title),
+#       legend.position="none")
+#   
+#   
+#   
+#   return(list(data.plot.time,data.plot.month))
+# }
+
 else if( varExp == "adjusted_linear") {
   qr1 <- lm(weight ~ year+boy+parity+Gest_group+birth_month+matheight2+malnutrition2+
             matbody2+matage+agemenarche +city, data=datared)
@@ -311,7 +307,7 @@ CoeffPlotsum <- ggplot(  qr1_results, aes(x=Year,y=Estimate),position=pd) +
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
   labs(x="Year", y="Birthweight difference in g") +
   ggtitle("Birth weight")+
-  scale_color_manual("Year:",values =   mypalette4)+
+  scale_color_manual("Year:",values =    mypalette7)+
   theme_bw()+
   theme(aspect.ratio=1,
         strip.text.x=element_text(size=strip_text),
@@ -330,98 +326,164 @@ else if( varExp == "adjusted_linear_occupation") {
   summary(qr1)
 }
 
-else if( varExp == "adjusted_gam") {
-  datared <-   datared %>%
-    mutate(birth_month= as.integer(birth_month))
+else if( varExp == "adjusted_year_qr") {
+  
+  formula<-as.formula( paste("weight ~  year+boy+parity+Gest_group+birth_month+matheight2+malnutrition2+
+              matbody2+matage+agemenarche +city"))
+  qr1 <- rq(formula , data=datared , tau =c(0.1, 0.5, 0.9))
+  
+  # plot(summary(qr1))
+  
+  qr1_sum <- summary(qr1,se = "boot", bsmethod= "xy")
+  
+  qr1_std_error01 <- qr1_sum[[1]][3]$coefficients[,2][2:5] %>%
+    as.data.frame() %>%
+    rename(sd_error = ".") %>%
+    mutate(Variables = row.names(.),
+           quantile = 0.1)
+  
+  qr1_std_error05 <-qr1_sum[[2]][3]$coefficients[,2][2:5]  %>%
+    as.data.frame() %>%
+    rename(sd_error = ".") %>%
+    mutate(Variables = row.names(.),
+           quantile = 0.5)
+  
+  qr1_std_error09 <-qr1_sum[[3]][3]$coefficients[,2][2:5] %>%
+    as.data.frame() %>%
+    rename(sd_error = ".") %>%
+    mutate(Variables = row.names(.),
+           quantile = 0.9)
+  
+  qr1_std_error <- rbind(qr1_std_error01, qr1_std_error05,qr1_std_error09)
+  
+  data_qr1 <- qr1$coefficients[2:5,] %>%
+    as.data.frame()%>%
+    mutate(Variables=row.names(.)) %>%
+    gather(., condition, measurement, `tau= 0.1`:`tau= 0.9`,factor_key=TRUE)%>%
+    mutate(quantile = as.numeric(substr(condition,6,8))) %>%
+    select(-condition) %>%
+    left_join(qr1_std_error) %>%
+    mutate(CIl = measurement-1.96*sd_error,
+           CIu = measurement+1.96*sd_error,
+           quantile = as.factor(quantile))
   
   
-qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12)+year+boy+parity+Gest_group+matheight2+malnutrition2+
-              matbody2+occupation2+matage+agemenarche +city, data=datared)
+  data_sum <- data_qr1 %>%
+    filter(!Variables=="(Intercept)") %>%
+    mutate(Variables=as.factor(Variables))%>%
+    add_row(Variables = c("year1880","year1880","year1880"), measurement = c(0,0,0),
+            quantile=c("0.1","0.5","0.9"),sd_error=c(0,0,0),CIl=c(0,0,0),CIu=c(0,0,0))
   
-  summary(qr1)
+  
+  CoeffPlotsum <- ggplot( data_sum , aes(x=quantile, y=measurement),position=pd) + 
+    geom_hline(yintercept=0, colour="grey") + 
+    geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Variables),position=pd,lwd=lwd_size)+
+    labs(x="Quantile", y="Birthweight difference in g") +
+    # ggtitle(paste((varExp)))+
+    scale_color_manual("Year:",values =   mypalette7)+
+    theme_bw()+
+    theme(aspect.ratio=1,
+          strip.text.x=element_text(size=strip_text),
+          axis.text=element_text(color="black",size=15),
+          axis.title=element_text(size=15),
+          legend.text=element_text(size=15),
+          legend.title =element_blank(),
+          plot.title = element_text(size=15),
+          legend.position = "bottom")
+  
+  
+  return( CoeffPlotsum)
 }
-else if( varExp == "adjusted_gam_plot") {
-  datared <-   datared %>%
-    mutate(birth_month= as.integer(birth_month))
-  
-  format_x <- function(x){ 
-    as.Date(x)
-  }
-  
-  z <- qnorm(0.975)
-  
-  qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12)+year+boy+parity+Gest_group+matheight2+malnutrition2+
-               matbody2+occupation2+matage+agemenarche +city, data=datared)
-  
-  plot.data <- {
-    pdf(NULL)
-    res <- plot(qr1)
-    invisible(dev.off())
-    res
-  }
-  
-  data.plot.time <- data.frame(x=plot.data[[1]]$x) %>%
-    mutate(fit =  plot.data[[1]]$fit,
-           se  =  plot.data[[1]]$se,
-           CIl =  fit - z*se,
-           CIu =  fit + z*se) %>%
-    select(-se) %>%
-    gather(., variable, value, fit:CIu ) %>%
-    ggplot() +
-    geom_line(aes(x=x,y=value, col=variable,linetype=variable),lwd=lwdline)+
-    xlab("Birth date")+
-    ylab("Effect on Birthweight")+
-    scale_x_continuous(labels=format_x )+
-    scale_colour_manual("",
-                        values = c("#555555","#555555","#555555"),
-                        limits=c("fit","CIl","CIu"),
-                        labels=c("fully adjusted","95% CI","95% CI"))+
-    scale_linetype_manual(name= "",
-                          limits=c("fit","CIl","CIu"),
-                          labels=c("fit","95% CI","95% CI"),
-                          values =c("solid","52","52"))+
-    theme_bw()+
-    theme(
-      strip.text.x=element_text(size=strip_text),
-      axis.text=element_text(color="black",size=10),
-      axis.title=element_text(size=10),
-      legend.text=element_text(size=size_legend),
-      legend.title=element_text(size=size_legend_title),
-      legend.position="none")
-  
-  
-  data.plot.month <- data.frame(x=plot.data[[2]]$x) %>%
-    mutate(fit =  plot.data[[2]]$fit,
-           se  =  plot.data[[2]]$se,
-           CIl =  fit - z*se,
-           CIu =  fit + z*se) %>%
-    select(-se) %>%
-    gather(., variable, value, fit:CIu ) %>%
-    ggplot() +
-    geom_line(aes(x=x,y=value, col=variable,linetype=variable),lwd=lwdline)+
-    xlab("Birth month")+
-    ylab("Effect on Birthweight")+
-    scale_colour_manual("",
-                        values = c("#555555","#555555","#555555"),
-                        limits=c("fit","CIl","CIu"),
-                        labels=c("fully adjusted","95% CI","95% CI"))+
-    scale_linetype_manual(name= "",
-                          limits=c("fit","CIl","CIu"),
-                          labels=c("fit","95% CI","95% CI"),
-                          values =c("solid","52","52"))+
-    theme_bw()+
-    theme(
-      strip.text.x=element_text(size=strip_text),
-      axis.text=element_text(color="black",size=10),
-      axis.title=element_text(size=10),
-      legend.text=element_text(size=size_legend),
-      legend.title=element_text(size=size_legend_title),
-      legend.position="none")
-  
-  
-  
-  return(list(data.plot.time,data.plot.month))
+# else if( varExp == "adjusted_gam") {
+#   datared <-   datared %>%
+#     mutate(birth_month= as.integer(birth_month))
+#   
+#   
+# qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12)+year+boy+parity+Gest_group+matheight2+malnutrition2+
+#               matbody2+occupation2+matage+agemenarche +city, data=datared)
+#   
+#   summary(qr1)
+# }
+# else if( varExp == "adjusted_gam_plot") {
+#   datared <-   datared %>%
+#     mutate(birth_month= as.integer(birth_month))
+#   
+#   format_x <- function(x){ 
+#     as.Date(x)
+#   }
+#   
+#   z <- qnorm(0.975)
+#   
+#   qr1 <- gam(weight ~ s( Birth_year_week_num, k=20) + s(birth_month,bs = "cc", k = 12)+year+boy+parity+Gest_group+matheight2+malnutrition2+
+#                matbody2+occupation2+matage+agemenarche +city, data=datared)
+#   
+#   plot.data <- {
+#     pdf(NULL)
+#     res <- plot(qr1)
+#     invisible(dev.off())
+#     res
+#   }
+#   
+#   data.plot.time <- data.frame(x=plot.data[[1]]$x) %>%
+#     mutate(fit =  plot.data[[1]]$fit,
+#            se  =  plot.data[[1]]$se,
+#            CIl =  fit - z*se,
+#            CIu =  fit + z*se) %>%
+#     select(-se) %>%
+#     gather(., variable, value, fit:CIu ) %>%
+#     ggplot() +
+#     geom_line(aes(x=x,y=value, col=variable,linetype=variable),lwd=lwdline)+
+#     xlab("Birth date")+
+#     ylab("Effect on Birthweight")+
+#     scale_x_continuous(labels=format_x )+
+#     scale_colour_manual("",
+#                         values = c("#555555","#555555","#555555"),
+#                         limits=c("fit","CIl","CIu"),
+#                         labels=c("fully adjusted","95% CI","95% CI"))+
+#     scale_linetype_manual(name= "",
+#                           limits=c("fit","CIl","CIu"),
+#                           labels=c("fit","95% CI","95% CI"),
+#                           values =c("solid","52","52"))+
+#     theme_bw()+
+#     theme(
+#       strip.text.x=element_text(size=strip_text),
+#       axis.text=element_text(color="black",size=10),
+#       axis.title=element_text(size=10),
+#       legend.text=element_text(size=size_legend),
+#       legend.title=element_text(size=size_legend_title),
+#       legend.position="none")
+#   
+#   
+#   data.plot.month <- data.frame(x=plot.data[[2]]$x) %>%
+#     mutate(fit =  plot.data[[2]]$fit,
+#            se  =  plot.data[[2]]$se,
+#            CIl =  fit - z*se,
+#            CIu =  fit + z*se) %>%
+#     select(-se) %>%
+#     gather(., variable, value, fit:CIu ) %>%
+#     ggplot() +
+#     geom_line(aes(x=x,y=value, col=variable,linetype=variable),lwd=lwdline)+
+#     xlab("Birth month")+
+#     ylab("Effect on Birthweight")+
+#     scale_colour_manual("",
+#                         values = c("#555555","#555555","#555555"),
+#                         limits=c("fit","CIl","CIu"),
+#                         labels=c("fully adjusted","95% CI","95% CI"))+
+#     scale_linetype_manual(name= "",
+#                           limits=c("fit","CIl","CIu"),
+#                           labels=c("fit","95% CI","95% CI"),
+#                           values =c("solid","52","52"))+
+#     theme_bw()+
+#     theme(
+#       strip.text.x=element_text(size=strip_text),
+#       axis.text=element_text(color="black",size=10),
+#       axis.title=element_text(size=10),
+#       legend.text=element_text(size=size_legend),
+#       legend.title=element_text(size=size_legend_title),
+#       legend.position="none")
+#   
+#   return(list(data.plot.time,data.plot.month))
+# }
 
-}
 }
 

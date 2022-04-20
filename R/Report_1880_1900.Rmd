@@ -159,6 +159,12 @@ function_quantile_regression_1880(varExp="unadjusted_city_linear")
 
 ## adjusted 
 
+### Quantile regression  
+
+```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
+function_quantile_regression_1880(varExp="adjusted_year_qr")
+```
+
 ### Parity
 ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
 function_quantile_regression_1880(varExp="adjusted_linear")

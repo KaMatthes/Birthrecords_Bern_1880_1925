@@ -25,6 +25,7 @@
   library(tsoutliers)
   library(strucchange)
   library(readxl)
+  library(ggsci)
 
   # original data
   data.bern <- "BernAll_V5.csv"
@@ -35,11 +36,19 @@
     mutate(year =as.factor(year))
   
   # Parameter zum Plotten
-  mypalette <- viridis(7, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
-  mypalette2 <- viridis(14, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
-  mypalette3 <- brewer.pal(n = 10, name = "Spectral")
-  mypalette4 <- brewer.pal(n = 5, name = "Spectral")
-  cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#D55E00", "#CC79A7")
+  # mypalette <- viridis(9, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
+  # mypalette5 <- viridis(5, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
+  # mypalette2 <- viridis(14, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
+  # mypalette3 <- brewer.pal(n = 10, name = "Spectral")
+  # mypalette4 <- brewer.pal(n = 5, name = "Spectral")
+  # mypalette4 <- brewer.pal(n = 8, name = "Dark2")
+  # mypalette4 <- brewer.pal(n = 9, name = "Set1")
+  # cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#CC79A7", "#0072B2", "#D55E00","#A6761D" ,"#7570B3")
+  # cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#D55E00", "#CC79A7")
+  # cbp5 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#CC79A7")
+  # mypalette6 <-pal_simpsons()(10)
+  mypalette7 <-pal_jco()(10)
+
   
   size_axis <-20
   strip_text <- 20
@@ -52,7 +61,7 @@
   size_legend_title<- 15
   pd <-position_dodge(width=0.8)
   plot_title <- 25
-  cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#D55E00", "#CC79A7")
+
   
   
   # 
