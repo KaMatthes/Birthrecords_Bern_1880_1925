@@ -13,7 +13,7 @@ databern <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
   filter(!year=="1901") %>%
   filter(!year=="1923") %>%
   select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, gestdummy2, matheight2, matbody2,
-         malnutrition2, occupation2, agemenarche, coordinates, distance, city)%>%
+         malnutrition2, occupation2, agemenarche, coordinates, distance, city, Grippe) %>%
   mutate(coordinates=ifelse(coordinates=="", NA, coordinates),
          birth_isoweek = isoweek(dmy(birthday2)),
          birth_month = month(dmy(birthday2)),

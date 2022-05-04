@@ -144,7 +144,7 @@ function_quantile_regression_1914_1922 <- function(varExp) {
       mutate(Variables=row.names(.)) %>%
       gather(., condition, measurement, `tau= 0.1`:`tau= 0.9`,factor_key=TRUE)%>%
       mutate(quantile = as.numeric(substr(condition,6,8))) %>%
-      select(-condition) %>%
+      dplyr::select(-condition) %>%
       left_join(qr1_std_error) %>%
       mutate(CIl = measurement-1.96*sd_error,
              CIu = measurement+1.96*sd_error,

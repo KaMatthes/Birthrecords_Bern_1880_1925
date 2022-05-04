@@ -66,8 +66,21 @@ No significant changes in birth weight 1918 and 1919. But birth weights increase
 Weekly
 <br />
 <br />
+Birth Weight
 ```{r ,echo=FALSE, message=FALSE,warning=FALSE,fig.height = 10, fig.width = 10}
-function_plot_kw(Timespan="weekly")
+function_plot_timeseries(Timespan="weekly", Var="Weight")
+```
+
+Gestational age, the differences are minimal (range: 39.6 - 40 weeks), there is no breakpoint.
+```{r ,echo=FALSE, message=FALSE,warning=FALSE,fig.height = 10, fig.width = 10}
+function_plot_timeseries(Timespan="weekly", Var="Gest")
+function_plot_timeseries(Timespan="monthly", Var="Gest")
+```
+
+Stillborn = (sum of stillborn per week/sum birth per week) *100, no breakpoint, but more stillborns 1918/1919
+```{r ,echo=FALSE, message=FALSE,warning=FALSE,fig.height = 10, fig.width = 10}
+function_plot_timeseries_stillborn(Timespan="weekly")
+function_plot_timeseries_stillborn(Timespan="monthly")
 ```
 
 <!-- Monthly -->
@@ -141,17 +154,27 @@ function_quantile_regression_1914_1922(varExp="unadjusted_insurance_linear")
 <!-- ```{r, echo=FALSE, message=TRUE,warning=FALSE} -->
 <!-- function_quantile_regression_1914_1922(varExp="linear_Exp") -->
 <!-- ``` -->
-### Flu intensity - all data
+
+### Flu Boxplot 
+Data range from 09.07.1918 – 02.02.1919
+<br />
+Only multiple==0, matage > 50 and matage <14 were excluded
+
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_plot_flu()
+```
+
+### Flu intensity
 
 ```{r, echo=FALSE, message=TRUE,warning=FALSE}
 function_quantile_regression_1914_1922(varExp="linear_Int")
 ```
 
-### Flu intensity - 01.01.1914 - 31.01.1920`
+<!-- ### Flu intensity - 01.01.1914 - 31.01.1920` -->
 
-```{r, echo=FALSE, message=TRUE,warning=FALSE}
-function_quantile_regression_1914_1922_flu(varExp="linear_Int")
-```
+<!-- ```{r, echo=FALSE, message=TRUE,warning=FALSE} -->
+<!-- function_quantile_regression_1914_1922_flu(varExp="linear_Int") -->
+<!-- ``` -->
 
 ### Flu intensity - Quantile Regression
 
@@ -206,16 +229,16 @@ function_quantile_regression_1914_1922(varExp="adjusted_year_linear_plot")
 <!-- function_quantile_regression_1914_1922(varExp="adjusted_year_linear_Exp") -->
 <!-- ``` -->
 
-### Flu Intensity - all data
+### Flu Intensity
 ```{r, echo=FALSE, message=TRUE,warning=FALSE}
 function_quantile_regression_1914_1922(varExp="adjusted_year_linear_Int")
 ```
 
 
-### Flu Intensity - 01.01.1914 - 31.01.1920
-```{r, echo=FALSE, message=TRUE,warning=FALSE}
-function_quantile_regression_1914_1922_flu(varExp="adjusted_year_linear_Int")
-```
+<!-- ### Flu Intensity - 01.01.1914 - 31.01.1920 -->
+<!-- ```{r, echo=FALSE, message=TRUE,warning=FALSE} -->
+<!-- function_quantile_regression_1914_1922_flu(varExp="adjusted_year_linear_Int") -->
+<!-- ``` -->
 
 ### Flu Intensity - Quantile Regression
 ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 8}
@@ -287,7 +310,7 @@ function_regression_gestage(varExp="unadjusted_plot")
 <!-- ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5} -->
 <!-- function_regression_gestage(varExp="unadjusted_Exp_plot" ) -->
 <!-- ``` -->
-### Flu intensity - all data
+### Flu intensity
 
 ```{r, echo=FALSE, message=TRUE,warning=FALSE}
 function_regression_gestage(varExp="unadjusted_Int")
@@ -297,15 +320,15 @@ function_regression_gestage(varExp="unadjusted_Int")
 function_regression_gestage(varExp="unadjusted_Int_plot")
 ```
 
-### Flu intensity - 01.01.1914 - 31.01.1920 
+<!-- ### Flu intensity - 01.01.1914 - 31.01.1920  -->
 
-```{r, echo=FALSE, message=TRUE,warning=FALSE}
-function_regression_gestage_flu(varExp="unadjusted_Int")
-```
+<!-- ```{r, echo=FALSE, message=TRUE,warning=FALSE} -->
+<!-- function_regression_gestage_flu(varExp="unadjusted_Int") -->
+<!-- ``` -->
 
-```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5}
-function_regression_gestage_flu(varExp="unadjusted_Int_plot")
-```
+<!-- ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5} -->
+<!-- function_regression_gestage_flu(varExp="unadjusted_Int_plot") -->
+<!-- ``` -->
 
 ## adjusted
 
@@ -333,7 +356,7 @@ function_regression_gestage(varExp="adjusted_year_plot")
 <!-- function_regression_gestage(varExp="adjusted_Exp_plot") -->
 <!-- ``` -->
 
-### Flu intensity - all data
+### Flu intensity
 
 ```{r, echo=FALSE,message=TRUE,warning=FALSE}
 function_regression_gestage(varExp="adjusted_Int")
@@ -343,15 +366,15 @@ function_regression_gestage(varExp="adjusted_Int")
 function_regression_gestage(varExp="adjusted_Int_plot")
 ```
 
-### Flu intensity - 01.01.1914 - 31.01.1920 
+<!-- ### Flu intensity - 01.01.1914 - 31.01.1920  -->
 
-```{r, echo=FALSE,message=TRUE,warning=FALSE}
-function_regression_gestage_flu(varExp="adjusted_Int")
-```
+<!-- ```{r, echo=FALSE,message=TRUE,warning=FALSE} -->
+<!-- function_regression_gestage_flu(varExp="adjusted_Int") -->
+<!-- ``` -->
 
-```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5}
-function_regression_gestage_flu(varExp="adjusted_Int_plot")
-```
+<!-- ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5} -->
+<!-- function_regression_gestage_flu(varExp="adjusted_Int_plot") -->
+<!-- ``` -->
 
 # Stillborn
 
@@ -405,7 +428,7 @@ function_regression_stillborn(varExp="unadjusted_plot")
 <!-- ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5} -->
 <!-- function_regression_stillborn(varExp="unadjusted_Exp_plot") -->
 <!-- ``` -->
-### Flu Intensity - all data
+### Flu Intensity
 
 ```{r, echo=FALSE, message=TRUE,warning=FALSE}
 function_regression_stillborn(varExp="unadjusted_Int")
@@ -415,15 +438,15 @@ function_regression_stillborn(varExp="unadjusted_Int")
 function_regression_stillborn(varExp="unadjusted_Int_plot")
 ```
 
-### Flu intensity  - 01.01.1914 - 31.01.1920
+<!-- ### Flu intensity  - 01.01.1914 - 31.01.1920 -->
 
-```{r, echo=FALSE, message=TRUE,warning=FALSE}
-function_regression_stillborn_flu(varExp="unadjusted_Int")
-```
+<!-- ```{r, echo=FALSE, message=TRUE,warning=FALSE} -->
+<!-- function_regression_stillborn_flu(varExp="unadjusted_Int") -->
+<!-- ``` -->
 
-```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5}
-function_regression_stillborn_flu(varExp="unadjusted_Int_plot")
-```
+<!-- ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 5} -->
+<!-- function_regression_stillborn_flu(varExp="unadjusted_Int_plot") -->
+<!-- ``` -->
 
 ## adjusted
 
@@ -447,7 +470,7 @@ function_regression_stillborn(varExp="adjusted_year_plot")
 <!-- ``` -->
 
 
-###  Flu intensity - all data
+###  Flu intensity
 
 ```{r, echo=FALSE,message=TRUE,warning=FALSE}
 function_regression_stillborn(varExp="adjusted_Int")
@@ -458,12 +481,12 @@ function_regression_stillborn(varExp="adjusted_Int_plot")
 ```
 
 
-###  Flu intensity - 01.01.1914 - 31.01.1920
+<!-- ###  Flu intensity - 01.01.1914 - 31.01.1920 -->
 
-```{r, echo=FALSE,message=TRUE,warning=FALSE}
-function_regression_stillborn_flu(varExp="adjusted_Int")
-```
+<!-- ```{r, echo=FALSE,message=TRUE,warning=FALSE} -->
+<!-- function_regression_stillborn_flu(varExp="adjusted_Int") -->
+<!-- ``` -->
 
-```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5}
-function_regression_stillborn_flu(varExp="adjusted_Int_plot")
-```
+<!-- ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 8, fig.width = 5} -->
+<!-- function_regression_stillborn_flu(varExp="adjusted_Int_plot") -->
+<!-- ``` -->

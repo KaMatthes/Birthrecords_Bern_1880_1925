@@ -26,9 +26,11 @@
   library(strucchange)
   library(readxl)
   library(ggsci)
+# library(Matching)
+# library(gridExtra)
 
   # original data
-  data.bern <- "BernAll_V5.csv"
+  data.bern <- "BernAll_V6.csv"
   data.grippe <- "GrippeBern.csv"
   
   
@@ -87,6 +89,9 @@
   source(paste0("R/LogRegression_Gestage_flu.R"))
   source(paste0("R/LogRegression_Gestage1880_1900.R"))
   source(paste0("R/plot_kw.R"))
+  source(paste0("R/plot_kw_stillborn.R"))
+  source(paste0("R/GrippeBoxplot.R"))
+  
 
   
   render(paste0("R/Report_1914_1922.Rmd"), output_file = paste0("../output/",today(),"_Report_1914_1922.html"))
