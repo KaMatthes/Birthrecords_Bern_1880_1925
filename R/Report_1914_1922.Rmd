@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r global_options, include=FALSE,message=FALSE}
 used.data <- databern %>%
        filter(multiple==0) %>%
-       filter(!(weight < 1500)) %>%
+       filter(!(weight < 1000)) %>%
        filter(!(matage > 50))  %>%
        filter(!(matage <14)) %>%
    filter(!(gest <30)) %>%
@@ -265,6 +265,48 @@ function_quantile_regression_1914_1922(varExp="adjusted_flu_qr")
 <!-- ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8} -->
 <!-- function_quantile_regression_1914_1922(varExp="adjusted_gam_model_plot_gest") -->
 <!-- ``` -->
+
+## Logistic Regression
+<2500 g low birth weight
+
+### unadjusted
+Year
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "unadjusted")
+```
+
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "unadjusted_plot")
+```
+
+Flu
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "unadjusted_Int")
+```
+
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "unadjusted_Int_plot")
+```
+
+
+### adjusted
+Year
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "adjusted")
+```
+
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "adjusted_plot")
+```
+
+Flu
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "adjusted_Int")
+```
+
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "adjusted_Int_plot")
+```
 
 
 # Gestational age

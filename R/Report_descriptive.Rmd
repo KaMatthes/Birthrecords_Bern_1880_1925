@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r global_options, include=FALSE,message=FALSE}
-data_plot <- read.csv(paste0("../data_raw/",data.bern), header=TRUE, sep=";") %>%
+data_plot <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
     filter(!year=="1901") %>%
     filter(!year=="1902") %>%
     filter(!year=="1903") %>%
@@ -27,7 +27,7 @@ data_plot <- read.csv(paste0("../data_raw/",data.bern), header=TRUE, sep=";") %>
     filter(!year=="1923") %>%
   filter(multiple==0) %>%
     filter(!(gest <30)) %>%
-  filter(!(weight < 1500)) %>%
+  filter(!(weight < 1000)) %>%
   filter(!(matage > 50))  %>%
    filter(!(matage < 14)) %>% 
     select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, gestdummy2, matheight2, matbody2,
@@ -84,9 +84,9 @@ tab1 <- tableby(year ~ weight + boy + parity + matage+stillborn+ Gest_group+city
                   occupation2+agemenarche, data=data_plot,test=FALSE)
 summary(tab1)
 
-# tab_des <- summary(tab1,text=TRUE)
-# tab_des <- as.data.frame(tab_des)
-# table2excel(tab_des, file = "output/Table1.xlsx")
+tab_des <- summary(tab1,text=TRUE)
+tab_des <- as.data.frame(tab_des)
+table2excel(tab_des, file = "output/Table1_V2.xlsx")
  
 
 ```

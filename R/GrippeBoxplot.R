@@ -23,8 +23,15 @@ datared <-  databern %>%
   dplyr::select(Grippe,boy,parity,Gest_group,matage,married,city,weight) %>%
   droplevels
 
-plot_grippe <- ggplot() +
-  geom_boxplot(data=datared, aes(factor(Grippe), weight)) +
+plot_grippe <- ggplot(data=datared,aes(x=factor(Grippe),y=weight)) +
+  geom_violin()+
+  # geom_boxplot(data=datared, aes(factor(Grippe), weight),width=.1) +
+  stat_summary(fun = "median",
+               geom = "crossbar", 
+               width = 0.5,
+               colour = "red") +
+ 
+  geom_quasirandom(alpha = 0.2, width = 0.4,aes(x=factor(Grippe),y=weight))
   xlab("")+
   theme_bw()+
   theme(aspect.ratio=1,

@@ -38,15 +38,14 @@ if( varExp == "unadjusted_year_linear") {
     geom_hline(yintercept=0, colour="grey") + 
     geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
     labs(x="Year", y="Birthweight difference in g") +
-    ggtitle("Birth weight")+
+    # ggtitle("Birth weight")+
     scale_color_manual("Year:",values =  mypalette7)+
+    scale_x_discrete( breaks=c("year1880","year1885","year1890","year1895","year1900"),
+                      labels=c("1880","1885","1890","1895", "1900"))+
     theme_bw()+
     theme(aspect.ratio=1,
-          strip.text.x=element_text(size=strip_text),
-          axis.text.x=element_text(color="black",size=6),
-          axis.title=element_text(size=15),
-          legend.text=element_text(size=15),
-          legend.title =element_blank(),
+          axis.text=element_text(color="black",size= size_axis),
+          axis.title=element_text(size= size_axis_title),
           plot.title = element_text(size=15),
           legend.position = "none")
     
@@ -306,15 +305,14 @@ CoeffPlotsum <- ggplot(  qr1_results, aes(x=Year,y=Estimate),position=pd) +
   geom_hline(yintercept=0, colour="grey") + 
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
   labs(x="Year", y="Birthweight difference in g") +
-  ggtitle("Birth weight")+
+  # ggtitle("Birth weight")+
   scale_color_manual("Year:",values =    mypalette7)+
+  scale_x_discrete( breaks=c("year1880","year1885","year1890","year1895","year1900"),
+                    labels=c("1880","1885","1890","1895", "1900"))+
   theme_bw()+
   theme(aspect.ratio=1,
-        strip.text.x=element_text(size=strip_text),
-        axis.text.x=element_text(color="black",size=6),
-        axis.title=element_text(size=15),
-        legend.text=element_text(size=15),
-        legend.title =element_blank(),
+        axis.text=element_text(color="black",size= size_axis),
+        axis.title=element_text(size= size_axis_title),
         plot.title = element_text(size=15),
         legend.position = "none")
 return(CoeffPlotsum)

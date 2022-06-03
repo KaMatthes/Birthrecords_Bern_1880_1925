@@ -1,6 +1,6 @@
 function_plot <- function() {
   
-data_plot <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
+data_plot <- read.csv(paste0("../data_raw/",data.bern), header=TRUE, sep=";") %>%
   filter(!year=="1901") %>%
   filter(!year=="1902") %>%
   filter(!year=="1903") %>%
@@ -10,7 +10,7 @@ data_plot <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
   filter(!year=="1923") %>%
   filter(multiple==0) %>%
     filter(!(gest <30)) %>%
-  filter(!(weight < 1500)) %>%
+  filter(!(weight < 1000)) %>%
   filter(!(matage > 50))  %>%
   filter(!(matage <14)) %>%
 

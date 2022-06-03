@@ -18,19 +18,11 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r global_options, include=FALSE,message=FALSE}
 used.data <- databern %>%
        filter(multiple==0) %>%
-       filter(!(weight < 1500)) %>%
+       filter(!(weight < 1000)) %>%
        filter(!(matage > 50))  %>%
        filter(!(matage <14)) %>%
    filter(!(gest <30)) %>%
   mutate(
-   Weight_quan = as.character(cut(weight, breaks=quantile(weight,probs=c(0,0.1,0.9,1)),include.lowest = TRUE)),
-   Weight_cat_quan  = Weight_quan,
-   Weight_cat_quan  = replace( Weight_cat_quan, Weight_cat_quan =="[1.5e+03,2.53e+03]","<10th percentile (< 2530 g)" ),
-   Weight_cat_quan  = replace( Weight_cat_quan, Weight_cat_quan =="(2.53e+03,3.78e+03]","10th–90th percentile (2530 - 3780 g)" ),
-   Weight_cat_quan  = replace( Weight_cat_quan, Weight_cat_quan =="(3.78e+03,5.58e+03]",">90th percentile (>3780 g)" ),
-   Weight_cat_quan = factor(Weight_cat_quan, levels = c(">90th percentile (>3780 g)", 
-                                                        "10th–90th percentile (2530 - 3780 g)",
-                                                        "<10th percentile (< 2530 g)")),
    year = as.factor(year),
    boy = as.factor(boy),
    stillborn = as.factor(stillborn),
@@ -179,6 +171,31 @@ function_quantile_regression_1880(varExp="adjusted_linear_plot")
 ```{r , echo=FALSE, message=FALSE,warning=FALSE,fig.height = 5, fig.width = 8}
 function_quantile_regression_1880(varExp="adjusted_linear_occupation")
 ```
+
+
+## Logistic Regression
+<2500 g low birth weight
+
+### unadjusted
+Year
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "unadjusted")
+```
+
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "unadjusted_plot")
+```
+
+### adjusted
+
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "adjusted")
+```
+
+```{r, echo=FALSE, message=TRUE,warning=FALSE}
+function_regression_lbw(varExp= "adjusted_plot")
+```
+
 
 <!-- GAM regression  -->
 <!-- <br /> -->
