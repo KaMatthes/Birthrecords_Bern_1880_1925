@@ -50,24 +50,17 @@ formula <-as.formula( paste("weight ~ year"))
 qr1 <- lm(formula , data=data1880)
 qr1_sum <- summary(qr1)
 
-p1_results <- data.frame(qr1_sum$coefficients) %>%
-  mutate( CIl = (Estimate-1.96*Std..Error)+Estimate[1],
-          CIu = (Estimate+1.96*Std..Error)+Estimate[1],
-          Year = row.names(.),
-          Estimate = Estimate+Estimate[1]) %>%
-  select(Year, Estimate, CIl, CIu) %>%
-  add_row(Year = "year1880", Estimate=3156.399, CIl=0, CIu=0) %>%
-  filter(!Year =="(Intercept)")
+p1_results <- as.data.frame(ggeffect(qr1, terms="year"))
 
-p1 <- ggplot(  p1_results, aes(x=Year,y=Estimate),position=pd) + 
-  geom_hline(yintercept=3156.399, colour="grey", lwd=1) + 
-  geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
-  ylim(c(2900,3500)) +
-  labs(x="Year", y="adjusted birthweight in gram") +
+p1 <- ggplot( p1_results, aes(x=x,y=predicted),position=pd) + 
+  # geom_hline(yintercept=3156.399, colour="grey", lwd=1) + 
+  geom_pointrange(aes(ymin=conf.low, ymax=conf.high,col=x),position=pd,lwd=lwd_size)+
+  ylim(c(3000,3300)) +
+  labs(x="Year", y="mean birthweight in gram") +
   # ggtitle("Birth weight")+
   scale_color_manual("Year:",values =  mypalette7)+
-  scale_x_discrete( breaks=c("year1880","year1885","year1890","year1895","year1900"),
-                    labels=c("1880","1885","1890","1895", "1900"))+
+  # scale_x_discrete( breaks=c("year1880","year1885","year1890","year1895","year1900"),
+  #                   labels=c("1880","1885","1890","1895", "1900"))+
   theme_bw()+
   theme(aspect.ratio=1,
         axis.text=element_text(color="black",size= size_axis),
@@ -80,25 +73,19 @@ qr1 <- lm(weight ~ year+boy+parity+Gest_group+birth_month+matheight2+malnutritio
             matbody2+matage+agemenarche +city, data=data1880)
 qr1_sum <- summary(qr1)
 
-p2_results <- data.frame(qr1_sum$coefficients)[1:5,] %>%
-  mutate( CIl = (Estimate-1.96*Std..Error)+Estimate[1],
-          CIu = (Estimate+1.96*Std..Error)+Estimate[1],
-          Year = row.names(.),
-          Estimate = Estimate+Estimate[1]) %>%
-  select(Year, Estimate, CIl, CIu) %>%
-  add_row(Year = "year1880", Estimate=3087.996, CIl=0, CIu=0) %>%
-  filter(!Year =="(Intercept)")
 
 
-p2<- ggplot(  p2_results, aes(x=Year,y=Estimate),position=pd) + 
-  geom_hline(yintercept=3087.996, colour="grey",lwd=1) + 
-  geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
-  ylim(c(2900,3500)) +
-  labs(x="Year", y="adjusted birthweight in gram") +
+p2_results <- as.data.frame(ggeffect(qr1, terms="year"))
+
+p2<- ggplot(p2_results, aes(x=x,y=predicted),position=pd) + 
+  # geom_hline(yintercept=3131.193, colour="grey",lwd=1) + 
+  geom_pointrange(aes(ymin=conf.low, ymax=conf.high,col=x),position=pd,lwd=lwd_size)+
+  ylim(c(3000,3300)) +
+  labs(x="Year", y="adjusted mean birthweight in gram") +
   # ggtitle("Birth weight")+
   scale_color_manual("Year:",values =    mypalette7)+
-  scale_x_discrete( breaks=c("year1880","year1885","year1890","year1895","year1900"),
-                    labels=c("1880","1885","1890","1895", "1900"))+
+  # scale_x_discrete( breaks=c("year1880","year1885","year1890","year1895","year1900"),
+  #                   labels=c("1880","1885","1890","1895", "1900"))+
   theme_bw()+
   theme(aspect.ratio=1,
         axis.text=element_text(color="black",size= size_axis),
@@ -164,27 +151,20 @@ formula<-as.formula( paste("weight ~ year"))
 qr1 <- lm(formula , data=data1914)
 qr1_sum <- summary(qr1)
 
-p3_results <- data.frame(qr1_sum$coefficients) %>%
-  mutate( CIl = (Estimate-1.96*Std..Error)+Estimate[1],
-          CIu = (Estimate+1.96*Std..Error)+Estimate[1],
-          Year = row.names(.),
-          Estimate = Estimate+Estimate[1]) %>%
-  select(Year, Estimate, CIl, CIu) %>%
-  add_row(Year = "year1914", Estimate=3183.9987, CIl=0, CIu=0) %>%
-  filter(!Year =="(Intercept)")
+p3_results <- as.data.frame(ggeffect(qr1, terms="year"))
 
 
-p3 <- ggplot( p3_results, aes(x=Year,y=Estimate),position=pd) + 
-  geom_hline(yintercept=3183.9987, colour="grey",lwd=1) + 
-  geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
-  ylim(c(2900,3500)) +
-  labs(x="Year", y="adjusted birthweight in gram") +
+p3 <- ggplot( p3_results, aes(x=x,y=predicted),position=pd) + 
+  # geom_hline(yintercept=3183.9987, colour="grey",lwd=1) + 
+  geom_pointrange(aes(ymin=conf.low, ymax=conf.high,col=x),position=pd,lwd=lwd_size)+
+  ylim(c(3000,3300)) +
+  labs(x="Year", y="mean birthweight in gram") +
   # ggtitle("Birth weight")+
   scale_color_manual("Year:",
                      values = mypalette7)+
-  scale_x_discrete( breaks=c("year1914","year1915","year1916","year1917","year1918","year1919","year1920",
-                             "year1921", "year1922"),
-                    labels=c("1914","1915","1916","1917", "1918", "1919","1920","1921","1922"))+
+  # scale_x_discrete( breaks=c("year1914","year1915","year1916","year1917","year1918","year1919","year1920",
+  #                            "year1921", "year1922"),
+  #                   labels=c("1914","1915","1916","1917", "1918", "1919","1920","1921","1922"))+
   theme_bw()+
   theme(aspect.ratio=1,
         axis.text=element_text(color="black",size= size_axis),
@@ -196,27 +176,20 @@ p3 <- ggplot( p3_results, aes(x=Year,y=Estimate),position=pd) +
 qr1 <- lm(weight ~ year + boy+parity+Gest_group+birth_month+matage+ married+city +insurance, data=data1914)
 qr1_sum <- summary(qr1)
 
-p4_results <- data.frame(qr1_sum$coefficients)[1:9,] %>%
-  mutate( CIl = (Estimate-1.96*Std..Error)+Estimate[1],
-          CIu = (Estimate+1.96*Std..Error)+Estimate[1],
-          Year = row.names(.),
-          Estimate = Estimate+Estimate[1]) %>%
-  select(Year, Estimate, CIl, CIu) %>%
-  add_row(Year = "year1914", Estimate=3243.480, CIl=0, CIu=0) %>%
-  filter(!Year =="(Intercept)")
+p4_results <- as.data.frame(ggeffect(qr1, terms="year"))
 
 
-p4 <- ggplot( p4_results, aes(x=Year,y=Estimate),position=pd) + 
-  geom_hline(yintercept=3243.480, colour="grey",lwd=1) + 
-  geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Year),position=pd,lwd=lwd_size)+
-  ylim(c(2900,3500)) +
-  labs(x="Year", y="adjusted birthweight in gram") +
+p4 <- ggplot( p4_results, aes(x=x,y=predicted),position=pd) + 
+  # geom_hline(yintercept=3243.480, colour="grey",lwd=1) + 
+  geom_pointrange(aes(ymin=conf.low, ymax=conf.high,col=x),position=pd,lwd=lwd_size)+
+  ylim(c(3000,3300)) +
+  labs(x="Year", y="adjusted mean birthweight in gram") +
   # ggtitle("Birth weight")+
   scale_color_manual("Year:",
                      values = mypalette7)+
-  scale_x_discrete( breaks=c("year1914","year1915","year1916","year1917","year1918","year1919","year1920",
-                             "year1921", "year1922"),
-                    labels=c("1914","1915","1916","1917", "1918", "1919","1920","1921","1922"))+
+  # scale_x_discrete( breaks=c("year1914","year1915","year1916","year1917","year1918","year1919","year1920",
+  #                            "year1921", "year1922"),
+  #                   labels=c("1914","1915","1916","1917", "1918", "1919","1920","1921","1922"))+
   theme_bw()+
   theme(aspect.ratio=1,
         axis.text=element_text(color="black",size= size_axis),
@@ -307,7 +280,7 @@ density_plot_old <- ggplot() +
         axis.text=element_text(color="black",size= 15),
         axis.title=element_text(size= 15),
         plot.title = element_text(size=15),
-        legend.position = "right")
+        legend.position = "bottom")
 
 
 data_density_new<-  data_density  %>%
