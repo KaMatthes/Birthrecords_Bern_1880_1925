@@ -9,7 +9,8 @@ datared <-  databern %>%
          Grippe= as.integer(Grippe),
          Grippe = as.character(Grippe),
          Grippe = replace(Grippe, Grippe=="0", "no flu"),
-         Grippe = replace(Grippe, Grippe=="1", "flu"))%>%
+         Grippe = replace(Grippe, Grippe=="1", "flu"),
+         lbw = ifelse(weight < 2500, 1, 0))%>%
   filter(birthday2 >= ymd("1918-07-09") & birthday2 <= ymd("1919-02-02")) %>%
   mutate(year_num = as.integer(as.character(year))) %>%
   filter(year_num >1913) %>%
@@ -22,7 +23,7 @@ datared <-  databern %>%
          year = as.character(year),
          #birth_month = as.factor(birth_month),
        ) %>%
-  dplyr::select(Grippe,boy,parity,gest,matage,married,city,weight, stillborn) %>%
+  dplyr::select(Grippe,boy,parity,gest,lbw,matage,married,city,weight, stillborn) %>%
   droplevels
 
 plot_grippe_weight <- ggplot(data=datared,aes(x=factor(Grippe),y=weight)) +
@@ -33,8 +34,10 @@ plot_grippe_weight <- ggplot(data=datared,aes(x=factor(Grippe),y=weight)) +
                geom = "crossbar", 
                width = 0.5,
                colour = "black") +
-  annotate("text", x=0.65, y=1900, label= "stillborn = 8.11 %", size=5) + 
-  annotate("text", x=1.70, y=1900, label= "stillborn = 6.13 %", size=5) + 
+  annotate("text", x=0.60, y=1900, label= "stillborn =  8.11 %", size=5) + 
+  annotate("text", x=0.66, y=1700, label= "lbw = 13.51 %", size=5) + 
+  annotate("text", x=1.65, y=1900, label= "stillborn =  6.13 %", size=5) + 
+  annotate("text", x=1.70, y=1700, label=  "lbw = 9.87 %", size=5) + 
   scale_color_manual("",
                      breaks=c("0","1"),
                      labels=c("alive", "stillborn"),
