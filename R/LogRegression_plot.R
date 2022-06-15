@@ -62,6 +62,7 @@ data_year <- rbind(mod.lbw.year.un,mod.lbw.year.an) %>%
 Coeff_plot_year <- ggplot( data_year, aes(x=forcats::fct_rev(Fac),y=Est),position=pd) + 
   geom_hline(yintercept=1, colour="grey", lwd=1) + 
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
+  ylim(c(0,2.5))+
   labs(x="Year", y="OR") +
   ggtitle("Low birth weight")+
   scale_color_manual(" ",
@@ -85,6 +86,7 @@ data_flu <- rbind(mod.lbw.flu.un,mod.lbw.flu.an)
 Coeff_plot_flu <- ggplot( data_flu, aes(x=Fac,y=Est),position=pd) + 
   geom_hline(yintercept=1, colour="grey", lwd=1) + 
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
+  ylim(c(0,4))+
   labs(x="Flu intensity", y="OR") +
   ggtitle("Low birth weight")+
   scale_color_manual(" ",
@@ -158,6 +160,7 @@ data_year <- rbind(mod.stillborn.year.un,mod.stillborn.year.an) %>%
 Coeff_plot_year_stillborn <- ggplot( data_year, aes(x=forcats::fct_rev(Fac),y=Est),position=pd) + 
   geom_hline(yintercept=1, colour="grey", lwd=1) + 
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
+  ylim(c(0,2.5))+
   labs(x="Year", y="OR") +
   ggtitle("Stillborn")+
   scale_color_manual(" ",
@@ -181,6 +184,7 @@ data_flu <- rbind(mod.stillborn.flu.un,mod.stillborn.flu.an)
 Coeff_plot_flu_stillborn <- ggplot( data_flu, aes(x=Fac,y=Est),position=pd) + 
   geom_hline(yintercept=1, colour="grey", lwd=1) + 
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
+  ylim(c(0,4))+
   labs(x="Flu intensity", y="OR") +
   ggtitle("Stillborn")+
   scale_color_manual(" ",
@@ -263,6 +267,7 @@ data_year_gest <- rbind(mod.gest.year.un,mod.gest.year.an) %>%
 Coeff_plot_year_gest <- ggplot( data_year_gest, aes(x=forcats::fct_rev(Fac),y=Est),position=pd) + 
   geom_hline(yintercept=1, colour="grey", lwd=1) + 
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
+  ylim(c(0,2.5))+
   labs(x="Year", y="OR") +
   ggtitle("Gestational week")+
   scale_color_manual(" ",
@@ -286,6 +291,7 @@ data_flu_gest <- rbind(mod.gest.flu.un,mod.gest.flu.an)
 Coeff_plot_flu_gest <- ggplot( data_flu_gest, aes(x=Fac,y=Est),position=pd) + 
   geom_hline(yintercept=1, colour="grey", lwd=1) + 
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
+  ylim(c(0,4))+
   labs(x="Flu intensity", y="OR") +
   ggtitle("Gestational week")+
   scale_color_manual(" ",
