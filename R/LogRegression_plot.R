@@ -64,7 +64,7 @@ Coeff_plot_year <- ggplot( data_year, aes(x=forcats::fct_rev(Fac),y=Est),positio
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
   ylim(c(0,2.5))+
   labs(x="Year", y="OR") +
-  ggtitle("Low birth weight")+
+  ggtitle("Low birth weight (reference: > 2500g)")+
   scale_color_manual(" ",
                      breaks=c("Year_unadj","Year_adj"),
                      labels=c("unadjusted","adjusted"),
@@ -88,7 +88,7 @@ Coeff_plot_flu <- ggplot( data_flu, aes(x=Fac,y=Est),position=pd) +
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
   ylim(c(0,4))+
   labs(x="Flu intensity", y="OR") +
-  ggtitle("Low birth weight")+
+  ggtitle("Low birth weight (reference: > 2500g)")+
   scale_color_manual(" ",
                      breaks=c("Flu_unadj","Flu_adj"),
                      labels=c("unadjusted","adjusted"),
@@ -162,7 +162,7 @@ Coeff_plot_year_stillborn <- ggplot( data_year, aes(x=forcats::fct_rev(Fac),y=Es
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
   ylim(c(0,2.5))+
   labs(x="Year", y="OR") +
-  ggtitle("Stillborn")+
+  ggtitle("Stillborn (reference: alive)")+
   scale_color_manual(" ",
                      breaks=c("Year_unadj","Year_adj"),
                      labels=c("unadjusted","adjusted"),
@@ -186,7 +186,7 @@ Coeff_plot_flu_stillborn <- ggplot( data_flu, aes(x=Fac,y=Est),position=pd) +
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
   ylim(c(0,4))+
   labs(x="Flu intensity", y="OR") +
-  ggtitle("Stillborn")+
+  ggtitle("Stillborn (reference: alive)")+
   scale_color_manual(" ",
                      breaks=c("Flu_unadj","Flu_adj"),
                      labels=c("unadjusted","adjusted"),
@@ -269,7 +269,7 @@ Coeff_plot_year_gest <- ggplot( data_year_gest, aes(x=forcats::fct_rev(Fac),y=Es
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
   ylim(c(0,2.5))+
   labs(x="Year", y="OR") +
-  ggtitle("Gestational week")+
+  ggtitle("Gestational week (reference: >=38 weeks)")+
   scale_color_manual(" ",
                      breaks=c("Year_unadj","Year_adj"),
                      labels=c("unadjusted","adjusted"),
@@ -293,7 +293,7 @@ Coeff_plot_flu_gest <- ggplot( data_flu_gest, aes(x=Fac,y=Est),position=pd) +
   geom_pointrange(aes(ymin=CIl, ymax=CIu,col=Var),lwd=lwd_size,position=pd,fatten=fatten_size)+
   ylim(c(0,4))+
   labs(x="Flu intensity", y="OR") +
-  ggtitle("Gestational week")+
+  ggtitle("Gestational week  (reference: >=38 weeks)")+
   scale_color_manual(" ",
                      breaks=c("Flu_unadj","Flu_adj"),
                      labels=c("unadjusted","adjusted"),
