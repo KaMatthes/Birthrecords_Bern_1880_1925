@@ -23,7 +23,7 @@ function_plot_timeseries <- function(Timespan, Var) {
     ungroup() %>%
     arrange(year, birth_isoweek)
    
- if(Var=="Weight") { 
+ if (Var=="Weight") { 
    data_w_ts <- data_kw %>%
      filter(!birth_isoweek==53) %>%
      dplyr::select(weight_mean)%>%
@@ -31,10 +31,21 @@ function_plot_timeseries <- function(Timespan, Var) {
    
    bp_w_ts <- breakpoints(data_w_ts ~ 1)
    
-   data_w_ts %>%
+   ts_weight <- data_w_ts %>%
      decompose(type = "additive") %>%
      autoplot(range.bars = FALSE) +
-     geom_vline(xintercept = 1919.500, linetype="dashed")
+     geom_vline(xintercept = 1919.288, linetype="dashed") +
+     annotate("rect",xmin=1918.462,xmax=1918.981,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+     xlab("Year") +
+     ggtitle("Time series - Birth weight") +
+     theme_bw() +
+     theme( axis.text = element_text(size=  size_axis,),
+            axis.title = element_text(size=  size_axis_title))
+   
+   
+   # cowplot::save_plot("output/ts_weight.pdf",  ts_weight,base_height=10,base_width=15)
+     
+     
  }
    
 else if(Var=="Gest") {
@@ -45,10 +56,18 @@ else if(Var=="Gest") {
    
    bp_w_ts <- breakpoints(data_w_ts ~ 1)
    
-   data_w_ts %>%
+   ts_gest <- data_w_ts %>%
      decompose(type = "additive") %>%
-     autoplot(range.bars = FALSE) 
-#      geom_vline(xintercept = 1919.500, linetype="dashed")
+     autoplot(range.bars = FALSE) +
+     # geom_vline(xintercept = 1919.288, linetype="dashed") +
+     annotate("rect",xmin=1918.462,xmax=1918.981,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+     xlab("Year") +
+     ggtitle("Time series - Gestational weeks") +
+     theme_bw() +
+     theme( axis.text = element_text(size=  size_axis,),
+            axis.title = element_text(size=  size_axis_title))
+   
+   # cowplot::save_plot("output/ts_gest.pdf",  ts_gest,base_height=10,base_width=15)
 
    }
   }
@@ -80,7 +99,13 @@ else if(Var=="Gest") {
       data_m_ts %>%
       decompose(type = "additive") %>%
       autoplot(range.bars = FALSE) +
-      geom_vline(xintercept = 1919.333, linetype="dashed") 
+        geom_vline(xintercept = 1919.288, linetype="dashed") +
+        annotate("rect",xmin=1918.462,xmax=1918.981,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+        xlab("Year") +
+        ggtitle("Time series - birth weight") +
+        theme_bw() +
+        theme( axis.text = element_text(size=  size_axis,),
+               axis.title = element_text(size=  size_axis_title))
       
     }
     
@@ -94,7 +119,14 @@ else if(Var=="Gest") {
       
       data_m_ts %>%
         decompose(type = "additive") %>%
-        autoplot(range.bars = FALSE)
+        autoplot(range.bars = FALSE) +
+        # geom_vline(xintercept = 1919.288, linetype="dashed") +
+        annotate("rect",xmin=1918.462,xmax=1918.981,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+        xlab("Year") +
+        ggtitle("Time series - birth weight") +
+        theme_bw() +
+        theme( axis.text = element_text(size=  size_axis,),
+               axis.title = element_text(size=  size_axis_title))
         # geom_vline(xintercept = 1919.333, linetype="dashed") 
     }
   }

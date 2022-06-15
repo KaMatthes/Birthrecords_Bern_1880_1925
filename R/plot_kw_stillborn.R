@@ -45,10 +45,19 @@ function_plot_timeseries_stillborn <- function(Timespan, Var) {
   
    bp_w_ts <- breakpoints(data_w_ts ~ 1)
    
-   data_w_ts %>%
+   ts_stillborn <- data_w_ts %>%
      decompose(type = "additive") %>%
-     autoplot(range.bars = FALSE) 
-     # geom_vline(xintercept = 1919.500, linetype="dashed")
+     autoplot(range.bars = FALSE)  +
+     # geom_vline(xintercept = 1919.288, linetype="dashed") +
+     annotate("rect",xmin=1918.462,xmax=1918.981,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+     xlab("Year") +
+     ggtitle("Time series - Proportion Stillborn") +
+     theme_bw() +
+     theme( axis.text = element_text(size=  size_axis,),
+            axis.title = element_text(size=  size_axis_title))
+   
+   cowplot::save_plot("output/ts_stillborn.pdf",ts_stillborn ,base_height=10,base_width=15)
+ 
   }
   
   
