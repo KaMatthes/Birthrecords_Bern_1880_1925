@@ -44,7 +44,7 @@ function_plot_timeseries <- function(Timespan, Var) {
    
    
    # cowplot::save_plot("output/ts_weight.pdf",  ts_weight,base_height=10,base_width=15)
-     
+     return( ts_weight )
      
  }
    
@@ -68,6 +68,7 @@ else if(Var=="Gest") {
             axis.title = element_text(size=  size_axis_title))
    
    # cowplot::save_plot("output/ts_gest.pdf",  ts_gest,base_height=10,base_width=15)
+   return( ts_gest )
 
    }
   }
@@ -128,6 +129,8 @@ else if(Var=="Gest") {
         theme( axis.text = element_text(size=  size_axis,),
                axis.title = element_text(size=  size_axis_title))
         # geom_vline(xintercept = 1919.333, linetype="dashed") 
+      
+      
     }
   }
   

@@ -16,7 +16,11 @@ if(varExp== "unadjusted") {
 
 formula<-as.formula( paste("lbw ~  year"))
 summary(mod.lbw <- glm(formula , data=datared, binomial(link = "logit")))
-# plot_model(mod.stillborn, title = paste("stillborn",eval(substitute(varExp))))
+
+
+
+
+# plot_model(mod.lbw, title = paste("stillborn",eval(substitute(varExp))))
   }
   
   else if(varExp== "unadjusted_plot") {

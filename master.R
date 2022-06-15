@@ -63,6 +63,7 @@ library(ggbeeswarm)
   size_legend <- 15
   size_legend_title<- 15
   pd <-position_dodge(width=0.8)
+  fatten_size <- 2.5
   plot_title <- 25
 
   
