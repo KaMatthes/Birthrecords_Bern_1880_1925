@@ -23,7 +23,7 @@ datared <-  databern %>%
          year = as.character(year),
          #birth_month = as.factor(birth_month),
        ) %>%
-  dplyr::select(Grippe,boy,parity,gest,lbw,matage,married,city,weight, stillborn) %>%
+  dplyr::select(Grippe,boy,parity,gest,lbw,matage,married,city,weight, stillborn, Gest_group) %>%
   droplevels
 
 plot_grippe_weight <- ggplot(data=datared,aes(x=factor(Grippe),y=weight)) +
@@ -66,8 +66,10 @@ plot_grippe_gest <- ggplot(data=datared,aes(x=factor(Grippe),y=gest)) +
                geom = "crossbar", 
                width = 0.5,
                colour = "black") +
-  # annotate("text", x=0.65, y=1900, label= "stillborn = 6.13 %", size=5) + 
-  # annotate("text", x=1.70, y=1900, label= "stillborn = 8.12 %", size=5) + 
+  annotate("text", x=0.66, y=35, label= "stillborn =  8.11 %", size=5) + 
+  annotate("text", x=0.66, y=33, label= "preterm = 29.73 %", size=5) + 
+  annotate("text", x=1.70,y=35, label= "stillborn =  6.13 %", size=5) + 
+  annotate("text", x=1.70, y=33, label=  "preterm = 14.85 %", size=5) + 
   scale_color_manual("",
                      breaks=c("0","1"),
                      labels=c("alive", "stillborn"),

@@ -402,7 +402,7 @@ Boyplot <- ggplot(data=boytabpro)+
   scale_fill_manual("Sex",
                     values = cbp1,
                     breaks=c("0","1"),
-                    labels=c("no", "yes"))+
+                    labels=c("female", "male"))+
   ylab("")+
   xlab("")+
   ggtitle("Sex")+
