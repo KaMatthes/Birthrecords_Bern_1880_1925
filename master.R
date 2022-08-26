@@ -1,4 +1,4 @@
-.libPaths(c("H:/Documents/R/win-library/4.1", "C:/Program Files/R/R-4.1.2/library"))
+.libPaths(c("H:/Documents/R/win-library/4.1", "C:/Program Files/R/R-4.2.1/library"))
 
   
 
@@ -26,7 +26,7 @@
   library(strucchange)
   library(readxl)
   library(ggsci) 
-library(ggbeeswarm)
+  library(ggbeeswarm)
 # library(Matching)
 # library(gridExtra)
 
