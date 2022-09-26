@@ -1,4 +1,4 @@
-source(paste0("R/GrippeExposure.R"))
+source(paste0("R/Flu_Exposure.R"))
 
 normalit<-function(m){
   (m - min(m))/(max(m)-min(m))
@@ -26,12 +26,10 @@ databern <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
          birth_season = factor(birth_season, levels = c("Spring","Summer","Fall","Winter")),
          gest = ifelse(gest >42, 42, gest),
          Gest_group = floor(gest),
-         # Gest_group  = replace(Gest_group ,Gest_group>42, "late" ),
          Gest_group  = replace(Gest_group ,Gest_group>=38, "normal" ),
          Gest_group  = replace(Gest_group ,Gest_group<38, "early" ),
          Gest_group = as.factor(Gest_group),
          Gest_tri = round(gest,0)-26,
-         # Gest_group = factor( Gest_group, levels = c("late","normal", "early")),
          parity = ifelse(parity>3, 4, parity),
          parity = as.factor(parity),
          parity = ifelse(parity=="4",">=4", parity),
@@ -384,10 +382,6 @@ databern <- databern %>%
          Flu_intensity_first=ifelse(is.na(Cases.range.first),0, Cases.range.first),
          Flu_intensity_second=ifelse(is.na(Cases.range.second),0, Cases.range.second),
          Flu_intensity_third=ifelse(is.na(Cases.range.third),0, Cases.range.third),
-         # Heigh_Exposure_first=ifelse(Cases.range.first>=0.2,1,0),
-         # Heigh_Exposure_second=ifelse(Cases.range.second>=0.2,1,0),
-         # Heigh_Exposure_third=ifelse(Cases.range.third>=0.2,1,0),
-         # Heigh_Exposure_sum =  as.factor(Heigh_Exposure_first+Heigh_Exposure_second+ Heigh_Exposure_third),
          Exposure_first=ifelse( Cases.rollsum.first>0,1,0),
          Exposure_first=ifelse(is.na(Exposure_first),0, Exposure_first),
          Exposure_second=ifelse(Cases.rollsum.second>0,1,0),

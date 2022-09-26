@@ -1,7 +1,5 @@
 .libPaths(c("H:/Documents/R/win-library/4.1", "C:/Program Files/R/R-4.2.1/library"))
 
-  
-
   library(survey)
   library(reshape2)
   library(viridis)
@@ -13,7 +11,6 @@
   library(broom)
   library(arsenal)
   library(scales)
-  library(quantreg)
   library(tidyverse)
   library(zoo)
   library(sjPlot)
@@ -27,32 +24,21 @@
   library(readxl)
   library(ggsci) 
   library(ggbeeswarm)
-# library(Matching)
-# library(gridExtra)
+  library(ggeffects)
+  library(xlsx)
+  library(export)
 
   # original data
-  data.bern <- "BernAll_V6.csv"
-  data.grippe <- "GrippeBern.csv"
+  data.bern <- "Bern_birth.csv"
+  data.flu <- "Flu_Bern.csv"
   
-  
-  data.bfs.stillborn <- readxl::read_excel(paste0("data_raw/Totgeburten_Schweiz.xlsx")) %>%
-    mutate(year =as.factor(year))
-  
-  # Parameter zum Plotten
-  # mypalette <- viridis(9, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
-  # mypalette5 <- viridis(5, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
-   mypalette2 <- viridis(14, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
-  mypalette3 <- brewer.pal(n = 10, name = "Spectral")
-  # mypalette4 <- brewer.pal(n = 5, name = "Spectral")
-  # mypalette4 <- brewer.pal(n = 8, name = "Dark2")
-   mypalette4 <- brewer.pal(n = 9, name = "Set1")
+  # Parameter for figures
+  mypalette2 <- viridis(14, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
+  mypalette4 <- brewer.pal(n = 9, name = "Set1") 
   cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#CC79A7", "#0072B2", "#D55E00","#A6761D" ,"#7570B3")
-  # cbp1 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#0072B2", "#D55E00", "#CC79A7")
-  # cbp5 <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#CC79A7")
-  # mypalette6 <-pal_simpsons()(10)
+  mypalette3 <- brewer.pal(n = 10, name = "Spectral")
   mypalette7 <-pal_jco()(10)
-
-  
+   
   size_axis <-12
   strip_text <- 10
   size_axis_title <- 12
@@ -67,40 +53,57 @@
   plot_title <- 25
 
   
-  
-  # 
-  # source(paste0("R/GrippeExposure.R"))
-  # source(paste0("R/data.R"))
-  # 
   # load data
   load("data/databern.RData")
-
-  source(paste0("R/data_plot.R")) # data loaded
-  source(paste0("R/density_plot.R"))
-  source(paste0("R/flu_plot.R"))
-  source(paste0("R/QuantileRegression1914_1922.R"))
-  source(paste0("R/QuantileRegression1914_1922_flu.R"))
-  source(paste0("R/QuantileRegression_flu_trimester.R"))
-  source(paste0("R/QuantileRegression1880_1900.R"))
-  source(paste0("R/LogRegression_Stillborn.R"))
-  source(paste0("R/LogRegression_Stillborn_flu.R"))
-  source(paste0("R/LogRegression_Stillborn_trimester.R"))
-  source(paste0("R/LogRegression_Stillborn1880_1900.R"))
-  source(paste0("R/LogRegression_Gestage.R"))
-  source(paste0("R/LogRegression_Gestage_trimester.R"))
-  source(paste0("R/LogRegression_Gestage_flu.R"))
-  source(paste0("R/LogRegression_Gestage1880_1900.R"))
-  source(paste0("R/plot_kw.R"))
-  source(paste0("R/plot_kw_stillborn.R"))
-  source(paste0("R/GrippeBoxplot.R"))
-  source(paste0("R/LogRegression_Birthweight.R"))
-  source(paste0("R/LogRegression_Birthweight_1880_1900.R"))
   
-
+  # prepare data
   
-  render(paste0("R/Report_1914_1922.Rmd"), output_file = paste0("../output/",today(),"_Report_1914_1922.html"))
-  render(paste0("R/Report_1880_1900.Rmd"), output_file = paste0("../output/",today(),"_Report_1880_1900.html"))
-  render(paste0("R/Appendix.Rmd"), output_file = paste0("../output/",today(),"_Appendix.html"))
+  used.data <- databern %>%
+    filter(multiple==0) %>%
+    filter(!(weight < 1000)) %>%
+    filter(!(matage > 50))  %>%
+    filter(!(matage <14)) %>%
+    filter(!(gest <30)) %>%
+    mutate(
+      year = as.factor(year),
+      boy = as.factor(boy),
+      stillborn = as.factor(stillborn),
+      city = as.factor(city),
+      insurance = as.factor(insurance),
+      married = as.factor(married),
+      matbody2 = as.factor(matbody2),
+      occupation2 = as.factor(occupation2),
+      matheight2  = as.factor(matheight2 ),
+      malnutrition2 = as.factor(malnutrition2),
+      Gest_group = factor(Gest_group, levels=c("normal","early")),
+      parity = factor(parity, levels=c("1","2","3",">=4")),
+      city = factor(city, levels=c("1","0")),
+      married = factor(married, levels=c("1","0")),
+      boy = factor(boy, levels=c("1","0")),
+      birth_season = factor( birth_season, levels=c("Spring","Summer","Fall","Winter")),
+      parity = factor(parity, levels = c("1","2","3",">=4")),
+      matbody2 = factor(matbody2, levels=c("2","1","3")),
+      matheight2 = factor(matheight2, levels=c("2","1","3")),
+      malnutrition2 = factor(malnutrition2, levels=c("0","1")),
+      occupation2 = factor(occupation2, levels=c("4","1","2","3","5","6","7")),
+      Exposure_sum_dummy = as.factor(Exposure_sum_dummy)
+    )
   
-  render(paste0("R/Report_descriptive.Rmd"), output_file = paste0("../output/",today(),"_Report_descriptive.html"))
+  
+# R scripts
+  source(paste0("R/Table1.R"))
+  source(paste0("R/Figure1.R"))
+  source(paste0("R/Figure2.R"))
+  source(paste0("R/Figure3.R"))
+  source(paste0("R/Supplement_Figure2.R"))
+  source(paste0("R/Supplement_Figure3to6.R"))
+  source(paste0("R/Supplement_Figure7and9.R"))
+  source(paste0("R/Supplement_Figure8.R"))
+  source(paste0("R/Supplement_Table3.R"))
+  source(paste0("R/Supplement_Table4.R"))
+  source(paste0("R/Supplement_Table5to7.R"))
+  source(paste0("R/Supplement_Table8.R"))
+  
+  
+  
   
