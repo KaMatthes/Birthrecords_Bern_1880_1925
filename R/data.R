@@ -10,8 +10,6 @@ datagrippe_com <- dataflu %>%
 # 
 databern <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";", fileEncoding="UTF-8-BOM") %>%
   filter(!(gest <30)) %>%
-  filter(!year=="1901") %>%
-  filter(!year=="1923") %>%
   select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, matheight2, matbody2,
          malnutrition2, occupation2, agemenarche, city, Grippe) %>%
   mutate(

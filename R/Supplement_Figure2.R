@@ -6,13 +6,6 @@ data_density <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";",fil
   filter(!(weight < 1500)) %>%
   filter(!(matage > 50))  %>%
   filter(!(matage <14)) %>%
-  filter(!year=="1901") %>%
-  filter(!year=="1902") %>%
-  filter(!year=="1903") %>%
-  filter(!year=="1911") %>%
-  filter(!year=="1912") %>%
-  filter(!year=="1913") %>%
-  filter(!year=="1923") %>%
   select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, matheight2, matbody2,
          malnutrition2, occupation2, agemenarche, city)%>%
   mutate(

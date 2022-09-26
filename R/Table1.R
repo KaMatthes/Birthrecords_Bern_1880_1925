@@ -1,11 +1,4 @@
 data_table <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";", fileEncoding="UTF-8-BOM") %>%
-  filter(!year=="1901") %>%
-  filter(!year=="1902") %>%
-  filter(!year=="1903") %>%
-  filter(!year=="1911") %>%
-  filter(!year=="1912") %>%
-  filter(!year=="1913") %>%
-  filter(!year=="1923") %>%
   filter(multiple==0) %>%
   filter(!(gest <30)) %>%
   filter(!(weight < 1000)) %>%
