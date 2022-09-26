@@ -1,6 +1,6 @@
 ####### Density ##########
 
-data_density <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
+data_density <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";",fileEncoding="UTF-8-BOM") %>%
   filter(multiple==0) %>%
   filter(!(gest <30)) %>%
   filter(!(weight < 1500)) %>%
@@ -13,9 +13,9 @@ data_density <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>
   filter(!year=="1912") %>%
   filter(!year=="1913") %>%
   filter(!year=="1923") %>%
-  select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, gestdummy2, matheight2, matbody2,
-         malnutrition2, occupation2, agemenarche, coordinates, distance, city)%>%
-  mutate(coordinates=ifelse(coordinates=="", NA, coordinates),
+  select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, matheight2, matbody2,
+         malnutrition2, occupation2, agemenarche, city)%>%
+  mutate(
          birth_isoweek = isoweek(dmy(birthday2)),
          birth_month = month(dmy(birthday2)),
          birth_weekday = wday(dmy(birthday2),week_start = 1),

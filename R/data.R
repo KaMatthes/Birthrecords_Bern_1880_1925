@@ -4,17 +4,17 @@ normalit<-function(m){
   (m - min(m))/(max(m)-min(m))
 }
 
-datagrippe_com <- datagrippe %>%
+datagrippe_com <- dataflu %>%
   select(Cases.rollsum, Cases.range, weeks.range)
 
 # 
-databern <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
+databern <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";", fileEncoding="UTF-8-BOM") %>%
   filter(!(gest <30)) %>%
   filter(!year=="1901") %>%
   filter(!year=="1923") %>%
-  select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, gestdummy2, matheight2, matbody2,
-         malnutrition2, occupation2, agemenarche, coordinates, distance, city, Grippe) %>%
-  mutate(coordinates=ifelse(coordinates=="", NA, coordinates),
+  select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, matheight2, matbody2,
+         malnutrition2, occupation2, agemenarche, city, Grippe) %>%
+  mutate(
          birth_isoweek = isoweek(dmy(birthday2)),
          birth_month = month(dmy(birthday2)),
          birth_season = as.character(cut(birth_month, breaks=c(1,3,6,9,12),include.lowest = TRUE)),

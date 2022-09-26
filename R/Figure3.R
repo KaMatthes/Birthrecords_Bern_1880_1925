@@ -1,4 +1,4 @@
-data_flu <-  read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
+data_flu <-  read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";",fileEncoding="UTF-8-BOM") %>%
   mutate(year_num = as.integer(as.character(year))) %>%
   filter(year_num >1913) %>%
   filter(!(gest <30)) %>%

@@ -1,5 +1,10 @@
 data.grippe.org <- read.csv(paste0("data_raw/",data.flu), sep=";",header=TRUE)
 
+
+normalit<-function(m){
+  (m - min(m))/(max(m)-min(m))
+}
+
 function_data_grippe <- function(n_week) {
 
 datagrippe_tmp <- data.grippe.org %>%
@@ -147,7 +152,7 @@ return(datagrippe_tmp)
 }
 
 
-datagrippe <- rbind(function_data_grippe(4), function_data_grippe(5),function_data_grippe(6),
+dataflu <- rbind(function_data_grippe(4), function_data_grippe(5),function_data_grippe(6),
                         function_data_grippe(7),function_data_grippe(8),function_data_grippe(9),
                         function_data_grippe(10), function_data_grippe(11),function_data_grippe(12),
                         function_data_grippe(13),function_data_grippe(14),function_data_grippe(15),
@@ -155,5 +160,5 @@ datagrippe <- rbind(function_data_grippe(4), function_data_grippe(5),function_da
   mutate(Cases.range = round(normalit(Cases.rollsum),2))
 
 
-save(datagrippe,file=paste0("data/data_flu.RData"))
-write.table(datagrippe,file=paste0("data/data_flu.csv"),row.names=FALSE, sep=";")
+save(dataflu,file=paste0("data/data_flu.RData"))
+write.table(dataflu,file=paste0("data/data_flu.csv"),row.names=FALSE, sep=";")

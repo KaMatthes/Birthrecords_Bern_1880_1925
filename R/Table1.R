@@ -1,4 +1,4 @@
-data_table <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
+data_table <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";", fileEncoding="UTF-8-BOM") %>%
   filter(!year=="1901") %>%
   filter(!year=="1902") %>%
   filter(!year=="1903") %>%
@@ -11,9 +11,9 @@ data_table <- read.csv(paste0("data_raw/",data.bern), header=TRUE, sep=";") %>%
   filter(!(weight < 1000)) %>%
   filter(!(matage > 50))  %>%
   filter(!(matage < 14)) %>% 
-  select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, gestdummy2, matheight2, matbody2,
-         malnutrition2, occupation2, agemenarche, coordinates, distance, city)%>%
-  mutate(coordinates=ifelse(coordinates=="", NA, coordinates),
+  select(year, insurance, matage, married,parity, gest, birthday2, boy, stillborn, multiple, weight, matheight2, matbody2,
+         malnutrition2, occupation2, agemenarche, city)%>%
+  mutate(
          birth_isoweek = isoweek(dmy(birthday2)),
          birth_month = month(dmy(birthday2)),
          birth_weekday = wday(dmy(birthday2),week_start = 1),
