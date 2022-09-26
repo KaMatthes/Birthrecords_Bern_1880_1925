@@ -53,6 +53,7 @@ This folder contains the created data from `data.R` and `Flu_Exposure.R`
 ### `data_raw` folder
 This folder contains the raw data for the analysis:
   - `Bern_birth.csv` : data from the maternity hospital in Bern for the years 1880- 1900 and 1914-1922
+  - `Flu_Bern.csv` : Weekly recorded flu numbers for the canton of Bern
   
 ### `output` folder
 
