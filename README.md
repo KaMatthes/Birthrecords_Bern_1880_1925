@@ -28,26 +28,36 @@ The data is public available via Zenodo:
 ### `R` folder 
 
 This folder contains all R scripts.
-
+  
   - `data.R` : prepares the data for the analysis
-  - `Bootstrapping.R` : function of the variable selection
-  - `function_data.R` : function to define data for analysis
-  - `lineareRegression.R` : code to calculate the adjusted R-square values of the respective models
-  - `Table1_wilcox_chi2tests.R` : code to create table 1
-  - `plots_body_composition.R` : code to create figure 1
-  - `Appendix_Table1.R` : code to create figure 1
+  - `Flu_Exposure.R` : prepares the data for the flu  exposure
+  - `Figure1.R` : code to create Figure 1
+  - `Figure2.R` : code to create Figure 2
+  - `Figure3.R` : code to create Figure 3
+  - `Table1.R`  : code to create Table 1
+  - `Supplement_Figure2.R`  : code to create Supplement Figure 2
+  - `Supplement_Figure3to6.R`  : code to create Supplement Figure 3 to 6
+  - `Supplement_Figure7and9.R`  : code to create Supplement Figure 7 and 9
+  - `Supplement_Figure8.R`  : code to create Supplement Figure 8
+  - `Supplement_Table3.R`  : code to create Supplement Table 3
+  - `Supplement_Table4.R`  : code to create Supplement Table 4
+  - `Supplement_Table5to7.R`  : code to create Supplement Table 5 to 7
+  - `Supplement_Table8.R`  : code to create Supplement Table 8
   
 ### `data` folder
 
-This folder contains the data.
-  - `data_study.csv` : contains socio-demographic, health- and lifestyle factors, and body scan variables of each participant
-  - `healthscore.csv` : contains "healthy score" from the food frequency questions calculated from from five food categories: fruits, vegetables, wholegrain
-products, meat, and sweet/salty snacks. For each category the officially recommended minimum or maximum amount of weekly intake was used as the cut-off value and a point was assigned if the recommendation was met. A score from 0 to 5 was built to reflect the overall healthiness of the diet.
+This folder contains the created data from `data.R` and `Flu_Exposure.R`
+  - `data_flu.RData` : flu exposure for each week, Number_weeks indicates the number of weeks a women is exposed to the flu, weeks.range=the period in calender weeks when the woman was exposed
+  - `databern.RData` : data including all information including exposure to flu
 
+### `data_raw` folder
+This folder contains the raw data for the analysis:
+  - `Bern_birth.csv` : data from the maternity hospital in Bern for the years 1880- 1900 and 1914-1922
+  
 ### `output` folder
 
-This folder contains the bootstrapping results of each outcome.
+This folder contains all outputs.
 
 ### `master.R` 
 
-This skript contains information of the used R packages, number of bootstrapping, set seed etc.. To run the function `bootsptrapping.R`, please run first `data.R`.
+This skript contains information of the used R packages, R scripts, plotting parameters etc, please run first ` load("data/databern.RData")`.
