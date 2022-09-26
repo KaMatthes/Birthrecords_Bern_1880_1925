@@ -17,11 +17,11 @@ The data is public available via Zenodo:
 
 ```
 .
-
-+-- data
-+-- data
-+-- output
 +-- R
++-- data
++-- data_raw
++-- output
+
 
 ```
 
