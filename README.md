@@ -2,7 +2,11 @@
 
 ## Paper
 
-submitted
+<br >
+Salvisberg V, Le Vu M, Matthes KL*, Staub K* (2023) Health of neonates born in the maternity hospital in Bern, Switzerland, 1880–1900 and 1914–1922. <i> PLOS ONE </i> 
+https://doi.org/10.1371/journal.pone.0289157
+<br >
+<sub>* Equal contribution</sub>
 
 ## Data
 
